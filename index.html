@@ -166,6 +166,35 @@ footer{background:#091d35;color:#c7d2df;padding:25px 0;font-size:12px}.footer-ro
 .product-search-box input{flex:1;min-width:0;border:0;outline:0;background:transparent;color:var(--ink);font:inherit;font-size:15px}
 .product-search-box input::placeholder{color:#8793a2}
 .product-search-box button{border:0;background:transparent;color:#64748b;font-size:25px;cursor:pointer;padding:2px 5px}
+
+/* Product details, cart and WhatsApp requirement system */
+.product-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.product-actions .btn{width:100%;padding:9px 7px;font-size:12px}
+.product-details-trigger{cursor:pointer}
+.product-details-trigger:focus{outline:3px solid #d7ad48;outline-offset:2px}
+.cart-fab{position:fixed;right:20px;bottom:82px;z-index:30;border:0;border-radius:999px;background:#102b4e;color:#fff;padding:13px 18px;font-weight:800;box-shadow:0 8px 25px #0003;cursor:pointer}
+.cart-count{display:inline-grid;place-items:center;min-width:22px;height:22px;padding:0 5px;margin-left:6px;border-radius:99px;background:#d7ad48;color:#102b4e}
+.shop-overlay{position:fixed;inset:0;z-index:100;background:#07182dcc;display:none;align-items:center;justify-content:center;padding:16px}
+.shop-overlay.open{display:flex}
+.shop-dialog{width:min(680px,100%);max-height:88vh;overflow:auto;background:#fff;border-radius:16px;padding:22px;box-shadow:0 24px 70px #0005;position:relative}
+.shop-dialog h2{color:#102b4e;margin:0 38px 16px 0;font-size:24px}
+.shop-close{position:absolute;right:14px;top:12px;border:0;background:#f1f4f8;border-radius:50%;width:36px;height:36px;font-size:23px;cursor:pointer}
+.detail-layout{display:grid;grid-template-columns:minmax(0, .9fr) 1.1fr;gap:22px;align-items:start}
+.detail-layout img{width:100%;max-height:300px;object-fit:contain;background:#f7f9fc;border:1px solid #e4eaf1;border-radius:12px}
+.detail-copy p{color:#526174;font-size:14px;white-space:pre-line}
+.detail-copy .no-price{display:inline-block;background:#fff8e7;color:#765512;border-radius:7px;padding:7px 10px;font-size:12px;font-weight:700}
+.qty-control{display:inline-flex;align-items:center;gap:12px;border:1px solid #d8e0e9;border-radius:8px;padding:5px 8px}
+.qty-control button{width:30px;height:30px;border:0;border-radius:6px;background:#f1f4f8;font-size:19px;cursor:pointer}
+.cart-line{display:grid;grid-template-columns:64px 1fr auto;gap:12px;align-items:center;padding:12px 0;border-bottom:1px solid #e4eaf1}
+.cart-line img{width:64px;height:64px;object-fit:contain;background:#f7f9fc;border-radius:8px}
+.cart-line h3{font-size:14px;color:#102b4e;margin:0 0 5px}
+.cart-line small{color:#64748b}
+.cart-empty{text-align:center;color:#64748b;padding:30px 10px}
+.cart-footer{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:18px;flex-wrap:wrap}
+.customer-fields{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:18px}
+.customer-fields input{width:100%;padding:11px;border:1px solid #d8e0e9;border-radius:8px;font:inherit}
+@media(max-width:600px){.detail-layout{grid-template-columns:1fr}.detail-layout img{max-height:220px}.shop-dialog{padding:18px}.customer-fields{grid-template-columns:1fr}.cart-fab{right:12px;bottom:78px}.product-actions{grid-template-columns:1fr 1fr}}
+
 </style>
 </head>
 <body>
@@ -222,6 +251,32 @@ footer{background:#091d35;color:#c7d2df;padding:25px 0;font-size:12px}.footer-ro
 </div><p class="note">These buttons open the general marketplace websites, not a verified Brahmraj Traders seller-store page.</p></div></section>
 <section class="branches" id="branches"><div class="wrap"><div class="section-head"><div class="eyebrow">Our Presence / हमारी शाखाएं</div><h2>Our Branches</h2><p>Serving customers across Uttar Pradesh.</p></div><div class="branch-grid"><div class="branch"><div class="pin">⌖</div><h3>Lucknow</h3><p>Uttar Pradesh, India</p></div><div class="branch"><div class="pin">⌖</div><h3>Agra</h3><p>Uttar Pradesh, India</p></div><div class="branch"><div class="pin">⌖</div><h3>Farrukhabad</h3><p>Uttar Pradesh, India</p></div></div><p class="note"><strong>Registered Address:</strong> Farrukhabad, Uttar Pradesh, India</p></div></section>
 <section class="contact" id="contact"><div class="wrap"><div class="section-head"><div class="eyebrow">Contact / संपर्क करें</div><h2>Let's Connect</h2><p>For product enquiries, bulk orders and general requirements, contact us.</p></div><div class="contact-grid"><div class="contact-card"><h3>Business Enquiry</h3><p><strong>Email:</strong> <a href="mailto:brahmrajtraders@outlook.com">brahmrajtraders@outlook.com</a></p><p><strong>WhatsApp / Call:</strong> <a href="https://wa.me/917800051151" rel="noopener" target="_blank">+91 78000 51151</a></p><a class="btn btn-gold" href="https://wa.me/917800051151?text=Hello%20Brahmraj%20Traders%2C%20I%20want%20to%20enquire%20about%20your%20products." rel="noopener" target="_blank">Order on WhatsApp</a> <a class="btn btn-outline" href="mailto:brahmrajtraders@outlook.com?subject=Brahmraj%20Traders%20Product%20Enquiry">Email Enquiry</a></div><div class="contact-card"><h3>Business Hours &amp; Locations</h3><p>Branches: Lucknow · Agra · Farrukhabad</p><p>Registered Address: Farrukhabad, Uttar Pradesh, India</p><p>India</p></div></div></div></section>
+
+<div aria-hidden="true" class="shop-overlay" id="productDetailsOverlay">
+ <section aria-labelledby="productDetailsTitle" aria-modal="true" class="shop-dialog" role="dialog">
+  <button aria-label="Close" class="shop-close" data-close-shop="productDetailsOverlay" type="button">×</button>
+  <h2 id="productDetailsTitle">Product Details</h2>
+  <div id="productDetailsContent"></div>
+ </section>
+</div>
+<div aria-hidden="true" class="shop-overlay" id="cartOverlay">
+ <section aria-labelledby="cartTitle" aria-modal="true" class="shop-dialog" role="dialog">
+  <button aria-label="Close" class="shop-close" data-close-shop="cartOverlay" type="button">×</button>
+  <h2 id="cartTitle">Your Requirement Cart</h2>
+  <div id="cartItems"></div>
+  <div class="customer-fields" id="customerFields" hidden>
+   <input id="customerName" autocomplete="name" placeholder="Your name (optional)" />
+   <input id="customerCity" autocomplete="address-level2" placeholder="City (optional)" />
+  </div>
+  <div class="cart-footer" id="cartFooter" hidden>
+   <strong id="cartTotalItems">Total items: 0</strong>
+   <button class="btn btn-gold" id="sendCartWhatsApp" type="button">Send Requirement on WhatsApp</button>
+  </div>
+  <p class="note">Product prices are not displayed. Our team will share the rates on WhatsApp.</p>
+ </section>
+</div>
+<button aria-label="Open shopping cart" class="cart-fab" id="openCartButton" type="button">🛒 My Cart <span class="cart-count" id="cartCount">0</span></button>
+
 </main>
 <footer><div class="wrap footer-row"><span>© <span id="year"></span> Brahmraj Traders. All rights reserved.</span><span>Manufacturer &amp; General Order Supplier</span></div></footer>
 <a aria-label="WhatsApp order details" class="float-wa" href="https://wa.me/917800051151?text=Hello%20Brahmraj%20Traders%2C%20I%20want%20to%20enquire%20about%20your%20products." rel="noopener" target="_blank">WhatsApp Enquiry</a>
@@ -290,4 +345,67 @@ document.addEventListener('DOMContentLoaded', function () {
   });
   applyFilters();
 });
+
+// Product details + quantity cart + WhatsApp requirement
+(function(){
+ const waNumber='917800051151';
+ const cards=Array.from(document.querySelectorAll('#products .toner-card'));
+ const cart=new Map();
+ const detailsOverlay=document.getElementById('productDetailsOverlay');
+ const cartOverlay=document.getElementById('cartOverlay');
+ const detailsContent=document.getElementById('productDetailsContent');
+ const cartItems=document.getElementById('cartItems');
+ const cartCount=document.getElementById('cartCount');
+ const cartFooter=document.getElementById('cartFooter');
+ const customerFields=document.getElementById('customerFields');
+ const totalLabel=document.getElementById('cartTotalItems');
+ if(!cards.length) return;
+ const esc=(v)=>String(v||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+ const getProduct=(card,index)=>({id:String(index),name:card.querySelector('h4')?.textContent.trim()||'Product',description:card.querySelector('.toner-info p')?.textContent.trim()||'Product details available on request.',image:card.querySelector('img')?.getAttribute('src')||'',alt:card.querySelector('img')?.alt||'Product image',category:card.getAttribute('data-category')||'Product'});
+ const products=cards.map(getProduct);
+ function openOverlay(el){el.classList.add('open');el.setAttribute('aria-hidden','false');document.body.style.overflow='hidden';}
+ function closeOverlay(el){el.classList.remove('open');el.setAttribute('aria-hidden','true');if(!document.querySelector('.shop-overlay.open'))document.body.style.overflow='';}
+ function addToCart(id,qty=1){const old=cart.get(id)||0;cart.set(id,old+qty);renderCart();}
+ function showDetails(product){
+  detailsContent.innerHTML=`<div class="detail-layout"><img src="${esc(product.image)}" alt="${esc(product.alt)}"><div class="detail-copy"><h3>${esc(product.name)}</h3><p>${esc(product.description)}</p><p><strong>Category:</strong> ${esc(product.category.replaceAll('-',' '))}</p><span class="no-price">Price: Contact us on WhatsApp</span><p>Rate and availability will be shared by Brahmraj Traders.</p><button class="btn btn-gold" id="detailAddToCart" type="button">Add to Cart</button></div></div>`;
+  document.getElementById('detailAddToCart').addEventListener('click',()=>{addToCart(product.id);closeOverlay(detailsOverlay);openOverlay(cartOverlay);});
+  openOverlay(detailsOverlay);
+ }
+ function renderCart(){
+  const total=Array.from(cart.values()).reduce((a,b)=>a+b,0);cartCount.textContent=total;
+  if(!total){cartItems.innerHTML='<div class="cart-empty">Your cart is empty. Browse products and add your requirements.</div>';cartFooter.hidden=true;customerFields.hidden=true;return;}
+  cartItems.innerHTML=Array.from(cart.entries()).map(([id,qty])=>{const p=products[Number(id)];return `<div class="cart-line"><img src="${esc(p.image)}" alt="${esc(p.alt)}"><div><h3>${esc(p.name)}</h3><small>Rate will be shared on WhatsApp</small><div class="qty-control"><button type="button" data-qty="minus" data-id="${id}" aria-label="Decrease quantity">−</button><strong>${qty}</strong><button type="button" data-qty="plus" data-id="${id}" aria-label="Increase quantity">+</button></div></div><button type="button" data-remove="${id}" aria-label="Remove ${esc(p.name)}" class="shop-close" style="position:static">×</button></div>`;}).join('');
+  cartFooter.hidden=false;customerFields.hidden=false;totalLabel.textContent='Total items: '+total;
+ }
+ cards.forEach((card,index)=>{
+  const p=products[index];
+  const image=card.querySelector('img');const title=card.querySelector('h4');
+  [image,title].filter(Boolean).forEach(el=>{el.classList.add('product-details-trigger');el.setAttribute('role','button');el.setAttribute('tabindex','0');el.setAttribute('aria-label','View details for '+p.name);el.addEventListener('click',()=>showDetails(p));el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();showDetails(p);}});});
+  const oldEnquiry=card.querySelector('.toner-info > a');if(oldEnquiry)oldEnquiry.remove();
+  const actions=document.createElement('div');actions.className='product-actions';
+  actions.innerHTML='<button class="btn btn-outline" type="button" data-details="'+index+'">View Details</button><button class="btn btn-gold" type="button" data-add="'+index+'">Add to Cart</button>';
+  card.querySelector('.toner-info')?.appendChild(actions);
+ });
+ document.addEventListener('click',e=>{
+  const details=e.target.closest('[data-details]');if(details){showDetails(products[Number(details.dataset.details)]);return;}
+  const add=e.target.closest('[data-add]');if(add){addToCart(add.dataset.add);openOverlay(cartOverlay);return;}
+  const qty=e.target.closest('[data-qty]');if(qty){const id=qty.dataset.id;const next=(cart.get(id)||0)+(qty.dataset.qty==='plus'?1:-1);if(next<=0)cart.delete(id);else cart.set(id,next);renderCart();return;}
+  const remove=e.target.closest('[data-remove]');if(remove){cart.delete(remove.dataset.remove);renderCart();}
+ });
+ document.querySelectorAll('[data-close-shop]').forEach(b=>b.addEventListener('click',()=>closeOverlay(document.getElementById(b.dataset.closeShop))));
+ [detailsOverlay,cartOverlay].forEach(o=>o.addEventListener('click',e=>{if(e.target===o)closeOverlay(o);}));
+ document.addEventListener('keydown',e=>{if(e.key==='Escape'){[detailsOverlay,cartOverlay].forEach(o=>closeOverlay(o));}});
+ document.getElementById('openCartButton').addEventListener('click',()=>{renderCart();openOverlay(cartOverlay);});
+ document.getElementById('sendCartWhatsApp').addEventListener('click',()=>{
+  if(!cart.size)return;
+  const lines=['Hello Brahmraj Traders, I would like to enquire about the following products:',''];
+  let n=0;cart.forEach((qty,id)=>{const p=products[Number(id)];n+=qty;lines.push(`${p.name} — Quantity: ${qty}`);});
+  lines.push('',`Total quantity: ${n}`,'Please share the rates and availability.');
+  const name=document.getElementById('customerName').value.trim();const city=document.getElementById('customerCity').value.trim();
+  if(name)lines.push(`Customer name: ${name}`);if(city)lines.push(`City: ${city}`);
+  window.open('https://wa.me/'+waNumber+'?text='+encodeURIComponent(lines.join('\n')),'_blank','noopener');
+ });
+ renderCart();
+})();
+
 </script></body></html>
