@@ -183,27 +183,40 @@ body :is(.about,.branches,.group-businesses,.products-live,.trust,.market) h3{co
 }
 
 
-/* Official marketplace logo artwork with restrained 3D depth */
-.market-card{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;min-height:150px}
-.market-card .market-logo{display:block;object-fit:contain;max-width:92%;filter:drop-shadow(0 5px 5px rgba(10,28,38,.22))}
-.market-card .amazon-logo{width:205px;height:76px}
-.market-card .flipkart-logo{width:220px;height:72px}
-.market-card .meesho-logo{width:76px;height:62px;object-fit:contain}
-.market-card .gem-logo{width:220px;height:82px}
-.market-card .market-brand-name{font-size:18px;font-weight:900;color:#4b0642;line-height:1}
+/* Marketplace cards: uniform white interiors and consistent logo presentation */
+.market-grid{justify-content:center}
+.market-card{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  min-height:190px;
+  background:#fff !important;
+  padding:20px 16px;
+  box-sizing:border-box;
+}
+.market-card .market-logo{
+  display:block;
+  width:230px;
+  height:92px;
+  max-width:90%;
+  object-fit:contain;
+  object-position:center;
+  background:#fff;
+  filter:drop-shadow(0 3px 4px rgba(10,28,38,.12));
+}
+.market-card .meesho-logo{
+  width:230px;
+  height:92px;
+  max-width:90%;
+  object-fit:contain;
+}
 .market-card small{margin-top:0}
-@media(max-width:600px){.market-card{min-height:135px}.market-card .amazon-logo,.market-card .flipkart-logo,.market-card .gem-logo{max-width:85%}}
-
-/* Official marketplace logo artwork with restrained 3D depth */
-.market-card{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;min-height:150px}
-.market-card .market-logo{display:block;object-fit:contain;max-width:92%;filter:drop-shadow(0 5px 5px rgba(10,28,38,.22))}
-.market-card .amazon-logo{width:205px;height:76px}
-.market-card .flipkart-logo{width:220px;height:72px}
-.market-card .meesho-logo{width:76px;height:62px;object-fit:contain}
-.market-card .gem-logo{width:220px;height:82px}
-.market-card .market-brand-name{font-size:18px;font-weight:900;color:#4b0642;line-height:1}
-.market-card small{margin-top:0}
-@media(max-width:600px){.market-card{min-height:135px}.market-card .amazon-logo,.market-card .flipkart-logo,.market-card .gem-logo{max-width:85%}}
+@media(max-width:600px){
+  .market-card{min-height:165px;padding:16px 10px}
+  .market-card .market-logo,.market-card .meesho-logo{width:210px;height:82px;max-width:92%}
+}
 </style></head>
 <body>
 <div id="falling-leaves" aria-hidden="true"></div>
@@ -231,7 +244,7 @@ body :is(.about,.branches,.group-businesses,.products-live,.trust,.market) h3{co
 <section class="market" id="marketplaces"><div class="wrap"><div class="section-head"><div class="eyebrow">Online Presence / ऑनलाइन उपलब्धता</div><h2>Find Us on Marketplaces</h2><p>हम प्रमुख ऑनलाइन मार्केटप्लेस और सरकारी खरीद प्लेटफॉर्म पर उपलब्ध हैं।</p></div><div class="market-grid">
 <a class="market-card" href="https://www.amazon.in/" rel="noopener" target="_blank"><img class="market-logo amazon-logo" src="amazon-logo-3d.png" alt="Amazon logo"><small>Visit Marketplace ↗</small></a>
 <a class="market-card" href="https://www.flipkart.com/" rel="noopener" target="_blank"><img class="market-logo flipkart-logo" src="flipkart-logo-3d.png" alt="Flipkart logo"><small>Visit Marketplace ↗</small></a>
-<a class="market-card" href="https://www.meesho.com/" rel="noopener" target="_blank"><img class="market-logo meesho-logo" src="meesho-logo-3d.png" alt="Meesho logo"><span class="market-brand-name">Meesho</span><small>Visit Marketplace ↗</small></a>
+<a class="market-card" href="https://www.meesho.com/" rel="noopener" target="_blank"><img class="market-logo meesho-logo" src="meesho-logo-3d.png" alt="Meesho logo"><small>Visit Marketplace ↗</small></a>
 <a class="market-card" href="https://gem.gov.in/" rel="noopener" target="_blank"><img class="market-logo gem-logo" src="gem-logo-3d.png" alt="Government e Marketplace GeM logo"><small>Visit Portal ↗</small></a>
 </div><p class="note">These buttons open the general marketplace websites, not a verified Brahmraj Traders seller-store page.</p></div></section>
 <section class="branches" id="branches"><div class="wrap"><div class="section-head"><div class="eyebrow">Our Presence / हमारी शाखाएं</div><h2>Our Branches</h2><p>Serving customers across Uttar Pradesh.</p></div><div class="branch-grid"><div class="branch"><div class="pin">⌖</div><h3>Lucknow</h3><p>Uttar Pradesh, India</p></div><div class="branch"><div class="pin">⌖</div><h3>Agra</h3><p>Uttar Pradesh, India</p></div><div class="branch"><div class="pin">⌖</div><h3>Farrukhabad</h3><p>Uttar Pradesh, India</p></div></div><p class="note"><strong>Registered Address:</strong> Farrukhabad, Uttar Pradesh, India</p></div></section>
