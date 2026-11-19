@@ -412,7 +412,7 @@ html{scroll-padding-top:90px}
 .recommended-section{overflow:hidden;padding:26px 0 38px!important}
 .recommended-section .section-head{margin-bottom:16px!important}
 .recommended-track-window{overflow:hidden;width:100%;position:relative}
-.recommended-track{display:flex;align-items:stretch;gap:18px;width:max-content;margin-left:100%;transform:translateX(0);animation:recommended-enter 8s linear forwards}
+.recommended-track{display:flex;align-items:stretch;gap:18px;width:max-content;margin-left:0;transform:translateX(100vw);animation:recommended-enter 14s linear forwards}
 .recommended-track.is-moving{transform:translateX(0);animation:recommended-marquee 48s linear infinite}
 .recommended-track:hover{animation-play-state:paused}
 .recommended-card{flex:0 0 245px;width:245px;min-width:245px;border:1px solid var(--line);border-radius:15px;overflow:hidden;background:#fff;display:flex;flex-direction:column;box-shadow:0 6px 18px #123b2b0b}
@@ -421,7 +421,7 @@ html{scroll-padding-top:90px}
 .recommended-card h3{margin:0;color:var(--navy);font-size:15px;line-height:1.35;min-height:40px}
 .recommended-card-actions{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:auto}
 .recommended-card-actions .btn{font-size:12px;padding:9px 5px;white-space:nowrap}
-@keyframes recommended-enter{from{margin-left:100%;transform:translateX(0)}to{margin-left:0;transform:translateX(0)}}
+@keyframes recommended-enter{from{transform:translateX(100vw)}to{transform:translateX(0)}}
 @keyframes recommended-marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 @media(max-width:900px){.hero-grid{padding:24px 0!important}.category-products-layout{grid-template-columns:190px minmax(0,1fr)}.category-product-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
 @media(max-width:600px){.hero-grid{padding:20px 0!important}.hero-visual img{height:190px!important}.category-products-layout{grid-template-columns:1fr}.category-sidebar{position:static;display:grid;grid-template-columns:1fr 1fr;gap:6px}.category-sidebar h3{grid-column:1/-1}.category-sidebar button{margin:0;padding:9px;font-size:12px}.category-product-grid{grid-template-columns:1fr 1fr!important}.recommended-card{flex-basis:190px;width:190px;min-width:190px}.recommended-card>img{height:145px}.recommended-card h3{font-size:13px}.recommended-card-actions{grid-template-columns:1fr}.cart-trolley-icon{width:25px;height:25px}}
