@@ -483,7 +483,86 @@ html{scroll-padding-top:90px}
 .live-product .live-product-body > p{display:none!important}
 .live-product .live-product-body{gap:12px}
 </style>
-\n</head>
+\n
+<style id="dadaji-full-photo-ornate-frame">
+/* Dadaji memorial portrait: show the complete original photo without cropping. */
+#proprietor .memorial-photo{
+  position:relative!important;
+  box-sizing:border-box!important;
+  padding:7px!important;
+  overflow:visible!important;
+  border:7px double #c99735!important;
+  outline:2px solid #8f5b1c!important;
+  outline-offset:4px!important;
+  border-radius:25px!important;
+  background:linear-gradient(145deg,#fffdf5,#fff4d8)!important;
+  box-shadow:0 14px 34px #4b351d30,inset 0 0 0 2px #f5d88b!important;
+}
+#proprietor .memorial-photo img{
+  display:block!important;
+  width:100%!important;
+  height:auto!important;
+  max-height:none!important;
+  aspect-ratio:auto!important;
+  object-fit:contain!important;
+  object-position:center!important;
+  border-radius:13px 13px 0 0!important;
+  background:#fff!important;
+}
+#proprietor .memorial-photo figcaption{
+  position:relative!important;
+  padding:15px 12px 17px!important;
+  background:linear-gradient(180deg,#fff 0%,#fff8e8 100%)!important;
+  border-radius:0 0 12px 12px!important;
+  border-top:2px solid #e5c16b!important;
+}
+#proprietor .memorial-photo figcaption:before{
+  content:"✿  ❀  ✿  ❀  ✿";
+  display:block;
+  color:#bd8525;
+  font-size:22px;
+  letter-spacing:7px;
+  line-height:1.2;
+  margin:0 0 7px;
+}
+#proprietor .memorial-photo:before{
+  content:"❀";
+  position:absolute;
+  z-index:4;
+  top:-19px;
+  left:50%;
+  transform:translateX(-50%);
+  display:grid;
+  place-items:center;
+  width:38px;
+  height:38px;
+  border-radius:50%;
+  color:#bd8525;
+  background:#fff8e8;
+  border:2px solid #d7ad48;
+  box-shadow:0 3px 9px #60441f22;
+  font-size:25px;
+}
+#proprietor .memorial-photo:after{
+  content:"✿                         ✿";
+  position:absolute;
+  z-index:4;
+  left:0;
+  right:0;
+  bottom:calc(100% - 8px);
+  display:flex;
+  justify-content:space-between;
+  padding:0 10px;
+  color:#bd8525;
+  font-size:23px;
+  pointer-events:none;
+}
+@media(max-width:850px){
+  #proprietor .memorial-photo img{height:auto!important;max-height:none!important}
+}
+</style>
+
+</head>
 <body>
 
 
