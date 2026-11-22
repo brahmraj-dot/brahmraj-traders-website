@@ -660,6 +660,76 @@ html{scroll-padding-top:90px}
   }
 </style>
 
+<style id="category-interaction-cleanup">
+#products .category-banner-grid .category-hotspot,
+#products .category-banner-grid .category-hotspot:hover,
+#products .category-banner-grid .category-hotspot:active,
+#products .category-banner-grid .category-hotspot:focus,
+#products .category-banner-grid .category-hotspot:focus-visible {
+  outline: none !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  background: transparent !important;
+}
+#products .category-banner-grid .category-hotspot {
+  -webkit-tap-highlight-color: transparent !important;
+}
+#products .category-banner-grid .category-hotspot::-moz-focus-inner {
+  border: 0 !important;
+}
+.category-products-layout {
+  display: grid;
+  grid-template-columns: 235px minmax(0, 1fr);
+  gap: 22px;
+  align-items: start;
+}
+.category-sidebar {
+  position: sticky;
+  top: 105px;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 16px;
+  box-shadow: 0 8px 22px #123b2b0c;
+}
+.category-sidebar h3 {
+  margin: 0 0 12px;
+  color: var(--navy);
+  font-size: 17px;
+}
+.category-sidebar button {
+  display: block;
+  width: 100%;
+  text-align: left;
+  border: 0;
+  border-radius: 8px;
+  background: #f4f8f4;
+  color: var(--ink);
+  padding: 11px 10px;
+  margin: 6px 0;
+  font: 600 13px Arial, sans-serif;
+  cursor: pointer;
+}
+.category-sidebar button:hover,
+.category-sidebar button.active {
+  background: #123b2b;
+  color: #fff;
+}
+.category-product-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  gap: 16px !important;
+}
+@media (max-width: 850px) {
+  .category-products-layout { grid-template-columns: 190px minmax(0, 1fr); gap: 14px; }
+  .category-product-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+}
+@media (max-width: 600px) {
+  .category-products-layout { grid-template-columns: 1fr; }
+  .category-sidebar { position: static; }
+  .category-sidebar button { display: inline-block; width: auto; margin: 4px; }
+  .category-product-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+}
+</style>
 </head>
 <body>
 
@@ -714,7 +784,17 @@ html{scroll-padding-top:90px}
     </div>
     <h2 id="selected-category-title"></h2>
     <p class="category-view-intro">Browse products in this category and select a product to view its details.</p>
-    <div class="product-grid" id="category-product-list"></div>
+    <div class="category-products-layout">
+      <aside class="category-sidebar" aria-label="Product categories">
+        <h3>All Categories</h3>
+        <button type="button" data-side-category="computer-laptop">Computer &amp; Laptop</button>
+        <button type="button" data-side-category="printers">Printer &amp; Photocopier Machine</button>
+        <button type="button" data-side-category="toner-ink">Printer Ink &amp; Toner Cartridge</button>
+        <button type="button" data-side-category="accessories">Computer Accessories</button>
+        <button type="button" data-side-category="stationery">Office Stationery</button>
+      </aside>
+      <div class="product-grid category-product-grid" id="category-product-list"></div>
+    </div>
     <p id="category-empty" hidden>No products are currently listed in this category.</p>
   </div>
 </div>
