@@ -660,6 +660,19 @@ html{scroll-padding-top:90px}
   }
 </style>
 
+
+<style id="category-view-flat-sidebar-fix">
+#category-products-view{background:transparent!important;border:0!important;box-shadow:none!important}
+#category-products-view .category-products-layout{display:grid;grid-template-columns:235px minmax(0,1fr);gap:22px;align-items:start}
+#category-products-view .category-sidebar{position:sticky;top:105px;background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px;box-shadow:none}
+#category-products-view .category-sidebar h3{margin:0 0 12px;color:var(--navy);font-size:16px}
+#category-products-view .category-sidebar button{display:block;width:100%;text-align:left;border:0;border-radius:7px;background:#f4f8f4;color:var(--ink);padding:10px;margin:6px 0;font:600 13px Arial,sans-serif;cursor:pointer}
+#category-products-view .category-sidebar button:hover,#category-products-view .category-sidebar button.active{background:#123b2b;color:#fff}
+#category-products-view .category-products-main{min-width:0}
+#category-products-view #selected-category-title{margin:0 0 8px;color:var(--navy)}
+#category-products-view .category-view-intro{margin:0 0 18px}
+@media(max-width:600px){#category-products-view .category-products-layout{grid-template-columns:1fr}#category-products-view .category-sidebar{position:static;display:grid;grid-template-columns:1fr 1fr;gap:6px}#category-products-view .category-sidebar h3{grid-column:1/-1}#category-products-view .category-sidebar button{margin:0;padding:9px;font-size:12px}}
+</style>
 </head>
 <body>
 
@@ -712,10 +725,22 @@ html{scroll-padding-top:90px}
       <button class="btn btn-outline" id="back-to-categories" type="button">← Back to Categories</button>
       <span class="eyebrow">BRAHMRAJ TRADERS · PRODUCTS</span>
     </div>
-    <h2 id="selected-category-title"></h2>
-    <p class="category-view-intro">Browse products in this category and select a product to view its details.</p>
-    <div class="product-grid" id="category-product-list"></div>
-    <p id="category-empty" hidden>No products are currently listed in this category.</p>
+    <div class="category-products-layout">
+      <aside class="category-sidebar" aria-label="Product categories">
+        <h3>Product Categories</h3>
+        <button type="button" data-side-category="computer-laptop">Computer &amp; Laptop</button>
+        <button type="button" data-side-category="printers">Printer &amp; Photocopier Machine</button>
+        <button type="button" data-side-category="toner-ink">Printer Ink &amp; Toner Cartridge</button>
+        <button type="button" data-side-category="accessories">Computer Accessories</button>
+        <button type="button" data-side-category="stationery">Office Stationery</button>
+      </aside>
+      <main class="category-products-main">
+        <h2 id="selected-category-title"></h2>
+        <p class="category-view-intro">Browse products in this category and select a product to view its details.</p>
+        <div class="product-grid category-product-grid" id="category-product-list"></div>
+        <p id="category-empty" hidden>No products are currently listed in this category.</p>
+      </main>
+    </div>
   </div>
 </div>
 <div class="product-detail-view" hidden="" id="product-detail-view">
