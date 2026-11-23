@@ -690,17 +690,154 @@ html{scroll-padding-top:90px}
 .product-price-block{display:flex;flex-direction:column;align-items:flex-start;gap:5px}
 .product-offer-row{display:flex;align-items:center;gap:8px;flex-wrap:nowrap;white-space:nowrap;max-width:100%}
 .product-offer{font-weight:400!important;color:#151515!important;font-size:15px!important;letter-spacing:0!important}
-.product-offer .offer-value{font-weight:400!important;color:#00a843!important;font-size:20px!important}
+.product-offer .offer-value{font-weight:400!important;color:#00a843!important;font-size:15px!important}
 .discount-percent{display:inline-block;margin:0!important;padding:3px 7px;border-radius:5px;background:#e8f8ee;color:#087b38;font-size:12px;font-weight:700;white-space:nowrap}
 .tax-inclusive{display:block;color:#237044;font-size:12px;font-weight:600;margin-top:1px}
 .shipping-extra{display:block;color:#9a5b16;font-size:12px;font-weight:600;margin-top:1px}
 .cart-item-pricing{display:flex;flex-wrap:wrap;gap:7px 14px;align-items:center;margin-top:5px;color:#52665a;font-size:13px}
 .cart-item-pricing strong{color:#123b2b;font-weight:600}
 .cart-line small{display:block!important;color:#68766d;font-size:12px;margin-top:4px}
-@media(max-width:420px){.product-offer-row{gap:5px}.product-offer{font-size:13px!important}.product-offer .offer-value{font-size:17px!important}.discount-percent{font-size:10px;padding:2px 5px}}
+@media(max-width:420px){.product-offer-row{gap:5px}.product-offer{font-size:13px!important}.product-offer .offer-value{font-size:13px!important}.discount-percent{font-size:10px;padding:2px 5px}}
 </style>
 
+<style id="approved-website-design-refinements">
+/* Approved full-width homepage banner */
+.home-banner{
+  display:block!important;
+  width:100%;
+  margin:0;
+  padding:0;
+  line-height:0;
+  overflow:hidden;
+  background:#fff;
+  border-bottom:3px solid #d9a441;
+}
+.home-banner img{
+  display:block;
+  width:100%;
+  height:auto;
+  max-height:none!important;
+  object-fit:contain!important;
+  object-position:center;
+}
 
+/* About Us uses the actual Brahmraj Traders storefront image */
+#about .about-photo img{
+  display:block;
+  width:100%;
+  height:auto!important;
+  aspect-ratio:857 / 698;
+  object-fit:contain!important;
+  object-position:center;
+  border-radius:16px;
+  background:#fff;
+  box-shadow:0 12px 30px #123b2b18;
+}
+
+/* Product category cards: green-and-gold visual system matching the approved design */
+#products .category-grid{
+  display:grid;
+  grid-template-columns:repeat(5,minmax(0,1fr));
+  gap:18px;
+  align-items:stretch;
+}
+#products .category-card{
+  display:flex;
+  flex-direction:column;
+  min-width:0;
+  overflow:hidden;
+  border:2px solid #d9a441;
+  border-radius:22px;
+  background:#fff;
+  box-shadow:0 9px 24px #123b2b16;
+  transition:transform .22s ease,box-shadow .22s ease;
+}
+#products .category-card:hover{
+  transform:translateY(-5px);
+  box-shadow:0 16px 32px #123b2b25;
+}
+#products .category-image{
+  height:178px;
+  padding:10px;
+  background:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+#products .category-image img{
+  width:100%;
+  height:100%;
+  object-fit:contain;
+}
+#products .category-info{
+  position:relative;
+  flex:1;
+  min-height:150px;
+  padding:34px 13px 17px;
+  text-align:center;
+  border-top:5px solid #d9a441;
+  background:linear-gradient(160deg,#0d4b31 0%,#073923 100%);
+  color:#fff!important;
+}
+#products .category-icon{
+  position:absolute;
+  top:-29px;
+  left:50%;
+  transform:translateX(-50%);
+  display:grid;
+  place-items:center;
+  width:56px;
+  height:56px;
+  border:4px solid #d9a441;
+  border-radius:50%;
+  background:#0d4b31;
+  color:#fff;
+  font-size:25px;
+  line-height:1;
+  box-shadow:0 3px 9px #0002;
+}
+#products .category-info h3{
+  margin:0 0 8px;
+  color:#fff!important;
+  font-size:clamp(14px,1.15vw,17px);
+  line-height:1.25;
+  font-weight:800;
+}
+#products .category-info p{
+  margin:0;
+  color:#f1f7f2!important;
+  font-size:13px;
+  line-height:1.45;
+}
+#products .category-card:focus-visible{
+  outline:3px solid #176b45;
+  outline-offset:4px;
+}
+@media(max-width:1050px){
+  #products .category-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+@media(max-width:650px){
+  #products .category-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+  #products .category-image{height:132px;padding:7px}
+  #products .category-info{min-height:138px;padding:31px 9px 13px}
+  #products .category-icon{width:48px;height:48px;top:-26px;font-size:21px}
+  #products .category-info h3{font-size:13px}
+  #products .category-info p{font-size:11px}
+}
+@media(max-width:380px){
+  #products .category-grid{gap:9px}
+  #products .category-image{height:116px}
+  #products .category-info h3{font-size:12px}
+  #products .category-info p{font-size:10px}
+}
+
+/* Branch cards intentionally use city landmarks, not photographs of the user's shop */
+.branch-showcase-copy p{
+  font-weight:700;
+  letter-spacing:.2px;
+}
+.branch-showcase-address{display:none!important}
+</style>
 </head>
 <body>
 
@@ -866,159 +1003,6 @@ html{scroll-padding-top:90px}
 })();
 </script>
 
-<style id="approved-website-design-refinements">
-/* Approved full-width homepage banner */
-.home-banner{
-  display:block!important;
-  width:100%;
-  margin:0;
-  padding:0;
-  line-height:0;
-  overflow:hidden;
-  background:#fff;
-  border-bottom:3px solid #d9a441;
-}
-.home-banner img{
-  display:block;
-  width:100%;
-  height:auto;
-  max-height:none!important;
-  object-fit:contain!important;
-  object-position:center;
-}
 
-/* About Us uses the actual Brahmraj Traders storefront image */
-#about .about-photo img{
-  display:block;
-  width:100%;
-  height:auto!important;
-  aspect-ratio:857 / 698;
-  object-fit:contain!important;
-  object-position:center;
-  border-radius:16px;
-  background:#fff;
-  box-shadow:0 12px 30px #123b2b18;
-}
-
-/* Product category cards: green-and-gold visual system matching the approved design */
-#products .category-grid{
-  display:grid;
-  grid-template-columns:repeat(5,minmax(0,1fr));
-  gap:18px;
-  align-items:stretch;
-}
-#products .category-card{
-  display:flex;
-  flex-direction:column;
-  min-width:0;
-  overflow:hidden;
-  border:2px solid #d9a441;
-  border-radius:22px;
-  background:#fff;
-  box-shadow:0 9px 24px #123b2b16;
-  transition:transform .22s ease,box-shadow .22s ease;
-}
-#products .category-card:hover{
-  transform:translateY(-5px);
-  box-shadow:0 16px 32px #123b2b25;
-}
-#products .category-image{
-  height:178px;
-  padding:10px;
-  background:#fff;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-}
-#products .category-image img{
-  width:100%;
-  height:100%;
-  object-fit:contain;
-}
-#products .category-info{
-  position:relative;
-  flex:1;
-  min-height:150px;
-  padding:34px 13px 17px;
-  text-align:center;
-  border-top:5px solid #d9a441;
-  background:linear-gradient(160deg,#0d4b31 0%,#073923 100%);
-  color:#fff!important;
-}
-#products .category-icon{
-  position:absolute;
-  top:-29px;
-  left:50%;
-  transform:translateX(-50%);
-  display:grid;
-  place-items:center;
-  width:56px;
-  height:56px;
-  border:4px solid #d9a441;
-  border-radius:50%;
-  background:#0d4b31;
-  color:#fff;
-  font-size:25px;
-  line-height:1;
-  box-shadow:0 3px 9px #0002;
-}
-#products .category-info h3{
-  margin:0 0 8px;
-  color:#fff!important;
-  font-size:clamp(14px,1.15vw,17px);
-  line-height:1.25;
-  font-weight:800;
-}
-#products .category-info p{
-  margin:0;
-  color:#f1f7f2!important;
-  font-size:13px;
-  line-height:1.45;
-}
-#products .category-card:focus-visible{
-  outline:3px solid #176b45;
-  outline-offset:4px;
-}
-@media(max-width:1050px){
-  #products .category-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
-}
-@media(max-width:650px){
-  #products .category-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
-  #products .category-image{height:132px;padding:7px}
-  #products .category-info{min-height:138px;padding:31px 9px 13px}
-  #products .category-icon{width:48px;height:48px;top:-26px;font-size:21px}
-  #products .category-info h3{font-size:13px}
-  #products .category-info p{font-size:11px}
-}
-@media(max-width:380px){
-  #products .category-grid{gap:9px}
-  #products .category-image{height:116px}
-  #products .category-info h3{font-size:12px}
-  #products .category-info p{font-size:10px}
-}
-
-/* Branch cards intentionally use city landmarks, not photographs of the user's shop */
-.branch-showcase-copy p{
-  font-weight:700;
-  letter-spacing:.2px;
-}
-.branch-showcase-address{display:none!important}
-
-/* Offer label and amount: matching size, weight and baseline */
-.product-offer,
-.product-offer .offer-value {
-  font-size: 17px !important;
-  font-weight: 400 !important;
-  line-height: 1.35 !important;
-  letter-spacing: 0 !important;
-}
-.product-offer { color: #151515 !important; }
-.product-offer .offer-value { color: #00a843 !important; }
-@media (max-width: 420px) {
-  .product-offer,
-  .product-offer .offer-value { font-size: 14px !important; }
-}
-
-</style>
 
 </body></html>
