@@ -664,6 +664,25 @@ html{scroll-padding-top:90px}
 <style id="product-price-display-styles">
 .product-price-block{display:flex;flex-direction:column;gap:4px;margin:10px 0 14px;font-size:14px;line-height:1.4}.product-mrp{color:#777;font-size:13px}.product-mrp s{margin-left:4px;color:#777}.product-offer{color:#222;font-weight:600}.product-offer strong{color:#a87918;font-size:16px}.price-request{display:inline-block;color:#9a6b13;font-weight:700;font-size:14px}.detail-price-block{margin:12px 0 18px}
 </style>
+
+<style id="requested-product-cart-refinements">
+/* Product prices, shipping disclosure, category navigation and cart totals */
+.product-price-block{display:flex;flex-direction:column;align-items:flex-start;gap:5px;margin:3px 0 8px}
+.product-offer,.product-offer strong{color:#075b35!important;font-weight:800}
+.product-mrp{color:#737b76;font-size:14px}
+.shipping-extra{display:block;color:#9a5b16;font-size:12px;font-weight:700;margin-top:3px}
+.category-products-layout{display:grid;grid-template-columns:235px minmax(0,1fr);gap:22px;align-items:start}
+.category-sidebar{position:sticky;top:105px;background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px;box-shadow:0 8px 22px #123b2b0c}
+.category-sidebar h3{margin:0 0 12px;color:var(--navy);font-size:17px}
+.category-sidebar button{display:block;width:100%;text-align:left;border:0;border-radius:8px;background:#f4f8f4;color:var(--ink);padding:11px 10px;margin:6px 0;font:600 13px Arial,sans-serif;cursor:pointer}
+.category-sidebar button:hover,.category-sidebar button.active{background:#123b2b;color:#fff}
+.category-product-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:16px!important}
+.cart-total-row{display:flex!important}
+.cart-line small{display:block!important;color:#68766d;font-size:12px;margin-top:4px}
+#cart-shipping-note{margin:0 0 12px}
+@media(max-width:900px){.category-products-layout{grid-template-columns:190px minmax(0,1fr)}.category-product-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
+@media(max-width:600px){.category-products-layout{grid-template-columns:1fr}.category-sidebar{position:static;display:grid;grid-template-columns:1fr 1fr;gap:6px}.category-sidebar h3{grid-column:1/-1}.category-sidebar button{margin:0;padding:9px;font-size:12px}.category-product-grid{grid-template-columns:1fr 1fr!important}}
+</style>
 </head>
 <body>
 
@@ -718,8 +737,20 @@ html{scroll-padding-top:90px}
     </div>
     <h2 id="selected-category-title"></h2>
     <p class="category-view-intro">Browse products in this category and select a product to view its details.</p>
-    <div class="product-grid" id="category-product-list"></div>
-    <p id="category-empty" hidden>No products are currently listed in this category.</p>
+    <div class="category-products-layout">
+      <aside class="category-sidebar" aria-label="Product categories">
+        <h3>Product Categories</h3>
+        <button type="button" data-side-category="computer-laptop">Computer &amp; Laptop</button>
+        <button type="button" data-side-category="printers">Printer &amp; Photocopier Machine</button>
+        <button type="button" data-side-category="toner-ink">Printer Ink &amp; Toner Cartridge</button>
+        <button type="button" data-side-category="accessories">Computer Accessories</button>
+        <button type="button" data-side-category="stationery">Office Stationery</button>
+      </aside>
+      <div class="category-products-content">
+        <div class="product-grid category-product-grid" id="category-product-list"></div>
+        <p id="category-empty" hidden>No products are currently listed in this category.</p>
+      </div>
+    </div>
   </div>
 </div>
 <div class="product-detail-view" hidden="" id="product-detail-view">
@@ -761,7 +792,7 @@ html{scroll-padding-top:90px}
  const cart=new Map(); let products=[]; let productsLoaded=false; let pendingCategory=null; let currentProduct=null; let currentCategory='toner-ink';
  const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
  function formatPrice(value){if(value===undefined||value===null||String(value).trim()==='')return '';const n=Number(String(value).replace(/[^0-9.]/g,''));return Number.isFinite(n)?'₹'+n.toLocaleString('en-IN'):'₹'+String(value);}
- function productPriceMarkup(p){const mrp=formatPrice(p.mrp),offer=formatPrice(p.offerPrice);if(!mrp&&!offer)return `<div class="product-price-block"><span class="price-request">Price on Request</span></div>`;return `<div class="product-price-block">${mrp?`<span class="product-mrp">MRP <s>${esc(mrp)}</s></span>`:''}<span class="product-offer">Offer Price: <strong>${offer?esc(offer):'Price on Request'}</strong></span></div>`;}
+ function productPriceMarkup(p){const mrp=formatPrice(p.mrp),offer=formatPrice(p.offerPrice);return `<div class="product-price-block">${mrp?`<span class="product-mrp">MRP <s>${esc(mrp)}</s></span>`:''}<span class="product-offer">Offer Price: <strong>${offer?esc(offer):'Price on Request'}</strong></span><span class="shipping-extra">Shipping Charges Extra</span></div>`;}
  function productCard(p){const card=document.createElement('article');card.className='live-product';card.innerHTML=`<img src="${esc(p.images[0]||'')}" alt="${esc(p.name)}" loading="lazy"><div class="live-product-body"><h3>${esc(p.name)}</h3><p>${esc(p.description)}</p>${productPriceMarkup(p)}<div class="product-card-actions"><button class="btn btn-outline view-details" type="button">View Details</button><button class="btn btn-gold add-cart" type="button">Add to Cart</button></div></div>`;card.querySelector('.view-details').addEventListener('click',()=>showDetails(p));card.querySelector('.add-cart').addEventListener('click',()=>addToCart(p));return card;}
  function showCategory(key){if(!categoryNames[key])return;currentCategory=key;pendingCategory=productsLoaded?null:key;browse.querySelector('.category-grid').hidden=true;categoryView.hidden=false;detailView.hidden=true;$('selected-category-title').textContent=categoryNames[key];document.querySelectorAll('[data-side-category]').forEach(b=>b.classList.toggle('active',b.dataset.sideCategory===key));list.innerHTML='';if(!productsLoaded){status.hidden=false;status.textContent='Loading products…';}else{const matches=products.filter(p=>p.category===key);matches.forEach(p=>list.append(productCard(p)));status.hidden=matches.length>0;if(!matches.length)status.textContent='No products are currently listed in this category.';}document.body.classList.remove('product-detail-mode');categoryView.scrollIntoView({behavior:'smooth',block:'start'});}
  function backToCategories(){categoryView.hidden=true;browse.querySelector('.category-grid').hidden=false;detailView.hidden=true;document.body.classList.remove('product-detail-mode');$('products').scrollIntoView({behavior:'smooth',block:'start'});}
@@ -772,10 +803,10 @@ html{scroll-padding-top:90px}
  $('home-nav-link')?.addEventListener('click',e=>{e.preventDefault();document.body.classList.remove('product-detail-mode');window.scrollTo({top:0,behavior:'smooth'});});
  const panel=$('cart-panel'),cartItems=$('cart-items');function openCart(){panel.classList.add('open');panel.setAttribute('aria-hidden','false');}function closeCart(){panel.classList.remove('open');panel.setAttribute('aria-hidden','true');}
  function addToCart(p){const key=p.name;const old=cart.get(key);cart.set(key,{...p,qty:(old?.qty||0)+1});updateCart();}
- function updateCart(){const entries=[...cart.values()];$('cart-count').textContent=entries.reduce((n,p)=>n+p.qty,0);cartItems.innerHTML=entries.length?'':'<p>Your cart is empty.</p>';entries.forEach(p=>{const row=document.createElement('div');row.className='cart-line';row.innerHTML=`<div><div class="cart-line-title">${esc(p.name)}</div><div class="cart-controls"><button type="button" data-act="minus" aria-label="Decrease quantity">−</button><span>${p.qty}</span><button type="button" data-act="plus" aria-label="Increase quantity">+</button><button type="button" class="cart-remove" data-act="remove">Remove</button></div></div>`;row.querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{if(b.dataset.act==='plus')p.qty++;if(b.dataset.act==='minus')p.qty=Math.max(0,p.qty-1);if(b.dataset.act==='remove'||p.qty===0)cart.delete(p.name);updateCart();}));cartItems.append(row);});}
+ function updateCart(){const entries=[...cart.values()];$('cart-count').textContent=entries.reduce((n,p)=>n+p.qty,0);cartItems.innerHTML=entries.length?'':'<p>Your cart is empty.</p>';let knownTotal=0,hasRequest=false;entries.forEach(p=>{const unit=Number(String(p.offerPrice||'').replace(/[^0-9.]/g,''));if(Number.isFinite(unit)&&unit>0)knownTotal+=unit*p.qty;else hasRequest=true;const row=document.createElement('div');row.className='cart-line';row.innerHTML=`<div><div class="cart-line-title">${esc(p.name)}</div><small>${p.offerPrice?'₹'+unit.toLocaleString('en-IN')+' each':'Price on Request'} · Shipping Charges Extra</small><div class="cart-controls"><button type="button" data-act="minus" aria-label="Decrease quantity">−</button><span>${p.qty}</span><button type="button" data-act="plus" aria-label="Increase quantity">+</button><button type="button" class="cart-remove" data-act="remove">Remove</button></div></div>`;row.querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{if(b.dataset.act==='plus')p.qty++;if(b.dataset.act==='minus')p.qty=Math.max(0,p.qty-1);if(b.dataset.act==='remove'||p.qty===0)cart.delete(p.name);updateCart();}));cartItems.append(row);});$('cart-total').textContent='₹'+knownTotal.toLocaleString('en-IN')+(hasRequest?' + Price on Request':'');let note=$('cart-shipping-note');if(!note){note=document.createElement('p');note.id='cart-shipping-note';note.className='shipping-extra';$('cart-total').parentElement.insertAdjacentElement('afterend',note);}note.textContent='Shipping Charges Extra'+(hasRequest?' · Final amount will be confirmed after price confirmation.':'');}
  $('cart-open')?.addEventListener('click',e=>{e.preventDefault();openCart();});$('cart-close')?.addEventListener('click',closeCart);panel?.addEventListener('click',e=>{if(e.target===panel)closeCart();});
  const thank=$('thankyou-popup');$('thankyou-close')?.addEventListener('click',()=>{thank.classList.remove('open');thank.setAttribute('aria-hidden','true');});
- $('checkout-form')?.addEventListener('submit',e=>{e.preventDefault();const entries=[...cart.values()];if(!entries.length){alert('Please add at least one product to your cart.');return;}const name=$('customer-name').value.trim();if(!name){$('customer-name').focus();return;}const mobile=$('customer-mobile').value.trim();const message=$('customer-message').value.trim();const lines=entries.map(p=>`${p.name} x ${p.qty}`).join('\n');const text=`Hello BRAHMRAJ TRADERS,\nCustomer Name: ${name}\nMobile: ${mobile||'Not provided'}\nProducts:\n${lines}\nAdditional Requirement: ${message||'None'}`;window.open('https://wa.me/917800051151?text='+encodeURIComponent(text),'_blank','noopener');cart.clear();updateCart();closeCart();e.target.reset();thank.classList.add('open');thank.setAttribute('aria-hidden','false');});
+ $('checkout-form')?.addEventListener('submit',e=>{e.preventDefault();const entries=[...cart.values()];if(!entries.length){alert('Please add at least one product to your cart.');return;}const name=$('customer-name').value.trim();if(!name){$('customer-name').focus();return;}const mobile=$('customer-mobile').value.trim();const message=$('customer-message').value.trim();const lines=entries.map(p=>`${p.name} x ${p.qty} - ${p.offerPrice?'₹'+Number(String(p.offerPrice).replace(/[^0-9.]/g,'')).toLocaleString('en-IN'):'Price on Request'}`).join('\n');const text=`Hello BRAHMRAJ TRADERS,\nCustomer Name: ${name}\nMobile: ${mobile||'Not provided'}\nProducts:\n${lines}\nShipping Charges: Extra\nAdditional Requirement: ${message||'None'}`;window.open('https://wa.me/917800051151?text='+encodeURIComponent(text),'_blank','noopener');cart.clear();updateCart();closeCart();e.target.reset();thank.classList.add('open');thank.setAttribute('aria-hidden','false');});
  async function loadProducts(){try{const r=await fetch('products.html',{cache:'no-store'});if(!r.ok)throw Error('products.html not found');const doc=new DOMParser().parseFromString(await r.text(),'text/html');const typeRank={cartridge:0,accessory:1,ink:2};products=[...doc.querySelectorAll('.product-item')].map(el=>({name:el.dataset.name||'Product',category:el.dataset.category||'other-products',productType:el.dataset.productType||'ink',description:el.dataset.description||'',specs:(el.dataset.specs||'').split('|').filter(Boolean),compatibility:el.dataset.compatibility||'',mrp:el.dataset.mrp||'',offerPrice:el.dataset.offerPrice||'',priceNote:el.dataset.priceNote||'',images:[...el.querySelectorAll('img')].map(img=>img.getAttribute('src')).filter(Boolean)})).filter(p=>p.name&&p.images.length).sort((a,b)=>(typeRank[a.productType]??3)-(typeRank[b.productType]??3));productsLoaded=true;$('category-products-view').hidden=true;if(pendingCategory){const key=pendingCategory;pendingCategory=null;showCategory(key);} }catch(err){productsLoaded=true;status.hidden=false;status.textContent='Unable to load the product list. Please check the location of products.html and the assets folder.';}}
  loadProducts();
 })();
