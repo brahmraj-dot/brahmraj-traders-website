@@ -700,6 +700,22 @@ html{scroll-padding-top:90px}
 @media(max-width:420px){.product-offer-row{gap:5px}.product-offer{font-size:13px!important}.product-offer .offer-value{font-size:17px!important}.discount-percent{font-size:10px;padding:2px 5px}}
 </style>
 
+
+/* Offer label and amount use identical typography */
+.product-offer,
+.product-offer .offer-value {
+  font-size: 18px !important;
+  font-weight: 400 !important;
+  line-height: 1.35 !important;
+  letter-spacing: 0 !important;
+}
+.product-offer { color: #151515 !important; }
+.product-offer .offer-value { color: #00a843 !important; }
+@media (max-width: 420px) {
+  .product-offer,
+  .product-offer .offer-value { font-size: 14px !important; }
+}
+
 </head>
 <body>
 
