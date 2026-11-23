@@ -701,21 +701,6 @@ html{scroll-padding-top:90px}
 </style>
 
 
-/* Offer label and amount use identical typography */
-.product-offer,
-.product-offer .offer-value {
-  font-size: 18px !important;
-  font-weight: 400 !important;
-  line-height: 1.35 !important;
-  letter-spacing: 0 !important;
-}
-.product-offer { color: #151515 !important; }
-.product-offer .offer-value { color: #00a843 !important; }
-@media (max-width: 420px) {
-  .product-offer,
-  .product-offer .offer-value { font-size: 14px !important; }
-}
-
 </head>
 <body>
 
@@ -1018,6 +1003,22 @@ html{scroll-padding-top:90px}
   letter-spacing:.2px;
 }
 .branch-showcase-address{display:none!important}
+
+/* Offer label and amount: matching size, weight and baseline */
+.product-offer,
+.product-offer .offer-value {
+  font-size: 17px !important;
+  font-weight: 400 !important;
+  line-height: 1.35 !important;
+  letter-spacing: 0 !important;
+}
+.product-offer { color: #151515 !important; }
+.product-offer .offer-value { color: #00a843 !important; }
+@media (max-width: 420px) {
+  .product-offer,
+  .product-offer .offer-value { font-size: 14px !important; }
+}
+
 </style>
 
 </body></html>
