@@ -951,6 +951,70 @@ html{scroll-padding-top:90px}
 }
 </style>
 
+
+<style id="sidebar-subcategories-visible-final">
+.category-sidebar .sidebar-subcategories{
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:stretch!important;
+  grid-column:1/-1!important;
+  width:calc(100% - 16px)!important;
+  box-sizing:border-box!important;
+  margin:2px 0 12px 16px!important;
+  padding:5px 0 5px 12px!important;
+  border-left:3px solid #d8aa22!important;
+  gap:4px!important;
+  visibility:visible!important;
+  opacity:1!important;
+}
+.category-sidebar .sidebar-subgroup-title{
+  display:block!important;
+  color:#8a6510!important;
+  font-size:10px!important;
+  font-weight:800!important;
+  letter-spacing:.7px!important;
+  margin:5px 0 2px!important;
+  padding-left:4px!important;
+}
+.category-sidebar button.sidebar-subcategory{
+  display:block!important;
+  width:100%!important;
+  box-sizing:border-box!important;
+  text-align:left!important;
+  margin:0!important;
+  padding:7px 8px!important;
+  border:1px solid #e4e9e2!important;
+  border-radius:6px!important;
+  background:#f7f8f4!important;
+  color:#244b39!important;
+  font:600 12px Arial,sans-serif!important;
+}
+.category-sidebar button.sidebar-subcategory:hover,
+.category-sidebar button.sidebar-subcategory.active{
+  background:#e6f2e9!important;
+  color:#0c5b32!important;
+  border-color:#83b695!important;
+}
+@media(max-width:600px){
+  .category-sidebar .sidebar-subcategories{
+    grid-column:1/-1!important;
+    width:calc(100% - 10px)!important;
+    margin-left:10px!important;
+  }
+}
+</style>
+
+<style id="hierarchical-sidebar-selection">
+.category-sidebar .sidebar-subcategories{display:flex!important;flex-direction:column!important;align-items:stretch!important;grid-column:1/-1!important;width:calc(100% - 16px)!important;box-sizing:border-box!important;margin:3px 0 12px 16px!important;padding:5px 0 5px 12px!important;border-left:3px solid #d8aa22!important;gap:7px!important}
+.category-sidebar .sidebar-subcategory-group{display:flex;flex-direction:column;gap:4px}
+.category-sidebar button.sidebar-subcategory{display:block!important;width:100%!important;text-align:left!important;margin:0!important;padding:8px 9px!important;border:1px solid #d9c36d!important;border-radius:6px!important;background:#fff8d6!important;color:#173d2d!important;font:800 11px Arial,sans-serif!important;letter-spacing:.35px}
+.category-sidebar button.sidebar-subcategory.active{background:#123b2b!important;color:#fff!important;border-color:#123b2b!important}
+.category-sidebar .sidebar-company-list{display:flex;flex-direction:column;gap:4px;margin:2px 0 5px 14px;padding-left:9px;border-left:2px solid #e8e1c9}
+.category-sidebar .sidebar-company-list[hidden]{display:none!important}
+.category-sidebar button.sidebar-company{display:block!important;width:100%!important;text-align:left!important;margin:0!important;padding:6px 8px!important;border:1px solid #e4e9e2!important;border-radius:5px!important;background:#f7f8f4!important;color:#244b39!important;font:600 12px Arial,sans-serif!important}
+.category-sidebar button.sidebar-company.active,.category-sidebar button.sidebar-company:hover{background:#e2f0e5!important;border-color:#83b695!important;color:#0c5b32!important}
+@media(max-width:600px){.category-sidebar .sidebar-subcategories{grid-column:1/-1!important;margin-left:10px!important;width:calc(100% - 10px)!important}}
+</style>
 </head>
 <body>
 
@@ -1012,14 +1076,22 @@ html{scroll-padding-top:90px}
         <button type="button" data-side-category="printers">Printer &amp; Photocopier Machine</button>
         <button type="button" data-side-category="toner-ink">Printer Ink &amp; Toner Cartridge</button>
         <div class="sidebar-subcategories" aria-label="Printer ink and toner subcategories">
-          <div class="sidebar-subgroup-title">TONER CARTRIDGES</div>
-          <button type="button" class="sidebar-subcategory" data-subcategory="toner-lapcare">↳ Lapcare Toner</button>
-          <button type="button" class="sidebar-subcategory" data-subcategory="toner-brahmraj">↳ Brahmraj Toner</button>
-          <button type="button" class="sidebar-subcategory" data-subcategory="toner-hp">↳ HP Toner</button>
-          <div class="sidebar-subgroup-title">PRINTER INK</div>
-          <button type="button" class="sidebar-subcategory" data-subcategory="ink-splashjet">↳ Splashjet Ink</button>
-          <button type="button" class="sidebar-subcategory" data-subcategory="ink-canon">↳ Canon Genuine Ink</button>
-          <button type="button" class="sidebar-subcategory" data-subcategory="ink-epson">↳ Epson Ink</button>
+          <div class="sidebar-subcategory-group" data-subcategory-group="toner">
+            <button type="button" class="sidebar-subcategory" data-subcategory="toner">TONER CARTRIDGES</button>
+            <div class="sidebar-company-list" data-company-list="toner">
+              <button type="button" class="sidebar-company" data-brand="lapcare" data-product-type="cartridge">Lapcare</button>
+              <button type="button" class="sidebar-company" data-brand="brahmraj" data-product-type="cartridge">Brahmraj</button>
+              <button type="button" class="sidebar-company" data-brand="hp" data-product-type="cartridge">HP</button>
+            </div>
+          </div>
+          <div class="sidebar-subcategory-group" data-subcategory-group="ink">
+            <button type="button" class="sidebar-subcategory" data-subcategory="ink">PRINTER INK</button>
+            <div class="sidebar-company-list" data-company-list="ink">
+              <button type="button" class="sidebar-company" data-brand="splashjet" data-product-type="ink">Splashjet</button>
+              <button type="button" class="sidebar-company" data-brand="canon" data-product-type="ink">Canon Genuine</button>
+              <button type="button" class="sidebar-company" data-brand="epson" data-product-type="ink">Epson</button>
+            </div>
+          </div>
         </div>
         <button type="button" data-side-category="accessories">Computer Accessories</button>
         <button type="button" data-side-category="stationery">Office Stationery</button>
@@ -1074,16 +1146,18 @@ html{scroll-padding-top:90px}
  function productCard(p){const card=document.createElement('article');card.className='live-product';card.innerHTML=`<img src="${esc(p.images[0]||'')}" alt="${esc(p.name)}" loading="lazy"><div class="live-product-body"><h3>${esc(p.name)}</h3><p>${esc(p.description)}</p>${productPriceMarkup(p)}<div class="product-card-actions"><button class="btn btn-outline view-details" type="button">View Details</button><button class="btn btn-gold add-cart" type="button">Add to Cart</button></div></div>`;card.querySelector('.view-details').addEventListener('click',()=>showDetails(p));card.querySelector('.add-cart').addEventListener('click',e=>addToCart(p,e.currentTarget));return card;}
  function addProductSectionHeading(title){const heading=document.createElement('div');heading.className='product-section-heading';heading.innerHTML=`<h2 class="section-title">${title}</h2><span class="brand-name">BRAHMRAJ</span>`;list.append(heading);}
  function addProductSubheading(title){const heading=document.createElement('div');heading.className='product-subcategory-heading';heading.textContent=title;list.append(heading);}
- function productSubcategoryMatch(p,key){const n=(p.name||'').toUpperCase();if(key==='toner-lapcare')return p.productType==='cartridge'&&n.startsWith('LAPCARE');if(key==='toner-brahmraj')return p.productType==='cartridge'&&n.startsWith('BRAHMRAJ');if(key==='toner-hp')return p.productType==='cartridge'&&n.startsWith('HP ');if(key==='ink-splashjet')return p.productType==='ink'&&n.startsWith('SPLASHJET');if(key==='ink-canon')return p.productType==='ink'&&n.startsWith('CANON');if(key==='ink-epson')return p.productType==='ink'&&n.startsWith('EPSON');return false;}
- function renderTonerInkSections(matches){const cartridges=matches.filter(p=>p.productType==='cartridge');const inks=matches.filter(p=>p.productType==='ink');if(cartridges.length){addProductSectionHeading('TONER CARTRIDGES');[['LAPCARE','LAPCARE'],['BRAHMRAJ','BRAHMRAJ'],['HP','HP']].forEach(([prefix,label])=>{const group=cartridges.filter(p=>p.name.toUpperCase().startsWith(prefix));if(group.length){addProductSubheading(label+' TONER');group.forEach(p=>list.append(productCard(p)));}});}if(inks.length){addProductSectionHeading('PRINTER INK');[['SPLASHJET','SPLASHJET INK'],['CANON','CANON GENUINE INK'],['EPSON','EPSON INK']].forEach(([prefix,label])=>{const group=inks.filter(p=>p.name.toUpperCase().startsWith(prefix));if(group.length){addProductSubheading(label);group.forEach(p=>list.append(productCard(p)));}});}}
- function showProductSubcategory(key){if(!productsLoaded)return;currentCategory='toner-ink';pendingCategory=null;browse.querySelector('.category-grid').hidden=true;categoryView.hidden=false;detailView.hidden=true;$('selected-category-title').textContent='Printer Ink & Toner Cartridge';document.querySelectorAll('[data-side-category]').forEach(b=>b.classList.toggle('active',b.dataset.sideCategory==='toner-ink'));document.querySelectorAll('[data-subcategory]').forEach(b=>b.classList.toggle('active',b.dataset.subcategory===key));list.innerHTML='';const matches=products.filter(p=>p.category==='toner-ink'&&productSubcategoryMatch(p,key));const headingMap={'toner-lapcare':'LAPCARE TONER CARTRIDGES','toner-brahmraj':'BRAHMRAJ TONER CARTRIDGES','toner-hp':'HP TONER CARTRIDGES','ink-splashjet':'SPLASHJET PRINTER INK','ink-canon':'CANON GENUINE PRINTER INK','ink-epson':'EPSON PRINTER INK'};addProductSectionHeading(headingMap[key]||'PRODUCTS');matches.forEach(p=>list.append(productCard(p)));status.hidden=matches.length>0;if(!matches.length)status.textContent='No products are currently listed in this subcategory.';document.body.classList.remove('product-detail-mode');categoryView.scrollIntoView({behavior:'smooth',block:'start'});}
- function showCategory(key){if(!categoryNames[key])return;currentCategory=key;pendingCategory=productsLoaded?null:key;browse.querySelector('.category-grid').hidden=true;categoryView.hidden=false;detailView.hidden=true;$('selected-category-title').textContent=categoryNames[key];document.querySelectorAll('[data-side-category]').forEach(b=>b.classList.toggle('active',b.dataset.sideCategory===key));document.querySelectorAll('[data-subcategory]').forEach(b=>b.classList.remove('active'));list.innerHTML='';if(!productsLoaded){status.hidden=false;status.textContent='Loading products…';}else{const matches=products.filter(p=>p.category===key);if(key==='toner-ink'){renderTonerInkSections(matches);}else{matches.forEach(p=>list.append(productCard(p)));}status.hidden=matches.length>0;if(!matches.length)status.textContent='No products are currently listed in this category.';}document.body.classList.remove('product-detail-mode');categoryView.scrollIntoView({behavior:'smooth',block:'start'});}
+ function productBrandMatch(p,brand){const n=(p.name||'').toUpperCase();if(brand==='lapcare')return n.startsWith('LAPCARE');if(brand==='brahmraj')return n.startsWith('BRAHMRAJ');if(brand==='hp')return n.startsWith('HP ');if(brand==='splashjet')return n.startsWith('SPLASHJET');if(brand==='canon')return n.startsWith('CANON');if(brand==='epson')return n.startsWith('EPSON');return false;}
+ function renderFilteredProductGroup(type,brand){list.innerHTML='';const isToner=type==='cartridge';addProductSectionHeading(isToner?'TONER CARTRIDGES':'PRINTER INK');let matches=products.filter(p=>p.category==='toner-ink'&&p.productType===type);if(brand)matches=matches.filter(p=>productBrandMatch(p,brand));if(brand){const labels={lapcare:'LAPCARE TONER',brahmraj:'BRAHMRAJ TONER',hp:'HP TONER',splashjet:'SPLASHJET INK',canon:'CANON GENUINE INK',epson:'EPSON INK'};addProductSubheading(labels[brand]||'PRODUCTS');}matches.forEach(p=>list.append(productCard(p)));status.hidden=matches.length>0;if(!matches.length)status.textContent='No products are currently listed in this selection.';}
+ function showProductSubcategory(key){if(!productsLoaded)return;const type=key==='toner'?'cartridge':'ink';currentCategory='toner-ink';pendingCategory=null;browse.querySelector('.category-grid').hidden=true;categoryView.hidden=false;detailView.hidden=true;$('selected-category-title').textContent='Printer Ink & Toner Cartridge';document.querySelectorAll('[data-side-category]').forEach(b=>b.classList.toggle('active',b.dataset.sideCategory==='toner-ink'));document.querySelectorAll('[data-subcategory]').forEach(b=>b.classList.toggle('active',b.dataset.subcategory===key));document.querySelectorAll('[data-company-list]').forEach(el=>el.hidden=el.dataset.companyList!==key);document.querySelectorAll('[data-subcategory-group]').forEach(el=>el.classList.toggle('selected',el.dataset.subcategoryGroup===key));document.querySelectorAll('[data-brand]').forEach(b=>b.classList.remove('active'));renderFilteredProductGroup(type,null);document.body.classList.remove('product-detail-mode');categoryView.scrollIntoView({behavior:'smooth',block:'start'});}
+ function showProductBrand(brand,type){if(!productsLoaded)return;const key=type==='cartridge'?'toner':'ink';currentCategory='toner-ink';pendingCategory=null;browse.querySelector('.category-grid').hidden=true;categoryView.hidden=false;detailView.hidden=true;$('selected-category-title').textContent='Printer Ink & Toner Cartridge';document.querySelectorAll('[data-side-category]').forEach(b=>b.classList.toggle('active',b.dataset.sideCategory==='toner-ink'));document.querySelectorAll('[data-subcategory]').forEach(b=>b.classList.toggle('active',b.dataset.subcategory===key));document.querySelectorAll('[data-company-list]').forEach(el=>el.hidden=el.dataset.companyList!==key);document.querySelectorAll('[data-subcategory-group]').forEach(el=>el.classList.toggle('selected',el.dataset.subcategoryGroup===key));document.querySelectorAll('[data-brand]').forEach(b=>b.classList.toggle('active',b.dataset.brand===brand));renderFilteredProductGroup(type,brand);document.body.classList.remove('product-detail-mode');categoryView.scrollIntoView({behavior:'smooth',block:'start'});}
+ function showCategory(key){if(!categoryNames[key])return;currentCategory=key;pendingCategory=productsLoaded?null:key;browse.querySelector('.category-grid').hidden=true;categoryView.hidden=false;detailView.hidden=true;$('selected-category-title').textContent=categoryNames[key];document.querySelectorAll('[data-side-category]').forEach(b=>b.classList.toggle('active',b.dataset.sideCategory===key));document.querySelectorAll('[data-subcategory]').forEach(b=>b.classList.remove('active'));list.innerHTML='';if(!productsLoaded){status.hidden=false;status.textContent='Loading products…';}else{const matches=products.filter(p=>p.category===key);if(key==='toner-ink'){document.querySelectorAll('[data-company-list]').forEach(el=>el.hidden=false);document.querySelectorAll('[data-subcategory]').forEach(b=>b.classList.remove('active'));document.querySelectorAll('[data-brand]').forEach(b=>b.classList.remove('active'));document.querySelectorAll('[data-subcategory-group]').forEach(el=>el.classList.remove('selected'));renderTonerInkSections(matches);}else{matches.forEach(p=>list.append(productCard(p)));}status.hidden=matches.length>0;if(!matches.length)status.textContent='No products are currently listed in this category.';}document.body.classList.remove('product-detail-mode');categoryView.scrollIntoView({behavior:'smooth',block:'start'});}
  function backToCategories(){categoryView.hidden=true;browse.querySelector('.category-grid').hidden=false;detailView.hidden=true;document.body.classList.remove('product-detail-mode');$('products').scrollIntoView({behavior:'smooth',block:'start'});}
  function showDetails(p){currentProduct=p;browse.hidden=true;categoryView.hidden=true;detailView.hidden=false;document.body.classList.add('product-detail-mode');$('detail-category').textContent=categoryNames[p.category]||'Product';$('detail-name').textContent=p.name;$('detail-description').textContent=p.description||'';let detailPrice=$('detail-price-block');if(!detailPrice){detailPrice=document.createElement('div');detailPrice.id='detail-price-block';detailPrice.className='detail-price-block';$('detail-description').insertAdjacentElement('afterend',detailPrice);}detailPrice.innerHTML=productPriceMarkup(p);const main=$('detail-main-image');main.src=p.images[0]||'';main.alt=p.name;const thumbs=$('detail-thumbnails');thumbs.innerHTML='';p.images.forEach((url,i)=>{const b=document.createElement('button');b.type='button';b.className='detail-thumb'+(i===0?' active':'');b.innerHTML=`<img src="${esc(url)}" alt="${esc(p.name)} photo ${i+1}">`;b.addEventListener('click',()=>{main.src=url;thumbs.querySelectorAll('button').forEach(x=>x.classList.remove('active'));b.classList.add('active');});thumbs.append(b);});const specs=$('detail-specs');specs.innerHTML='';p.specs.forEach(s=>{const li=document.createElement('li');li.textContent=s;specs.append(li);});$('compatibility-block').hidden=!p.compatibility;$('detail-compatibility').textContent=p.compatibility||'';$('detail-add-cart').onclick=e=>addToCart(p,e.currentTarget);const rec=$('recommended-product-list');rec.innerHTML='';const byCategory=Object.keys(categoryNames).map(k=>products.filter(x=>x!==p&&x.category===k));const others=[];let takeMore=true;for(let i=0;takeMore&&others.length<15;i++){takeMore=false;for(const group of byCategory){if(group[i]){others.push(group[i]);takeMore=true;if(others.length>=15)break;}}}if(others.length){const win=document.createElement('div');win.className='recommended-track-window';const track=document.createElement('div');track.className='recommended-track';others.forEach((item,index)=>{const card=document.createElement('article');card.className='recommended-card';card.innerHTML=`<img src="${esc(item.images[0]||'')}" alt="${esc(item.name)}" loading="lazy"><div class="recommended-card-body"><h3>${esc(item.name)}</h3><div class="recommended-card-actions"><button class="btn btn-outline" type="button" data-rec-view="${index}">View Details</button><button class="btn btn-gold" type="button" data-rec-add="${index}">Add to Cart</button></div></div>`;track.append(card);});const originals=[...track.children];for(let copy=0;copy<2;copy++){originals.forEach(card=>track.append(card.cloneNode(true)));}win.append(track);rec.append(win);let offset=win.clientWidth;let lastFrame=0;let paused=false;const speed=75;const trackGap=parseFloat(getComputedStyle(track).gap)||18;track.style.transform=`translate3d(${offset}px,0,0)`;win.addEventListener('mouseenter',()=>{paused=true;});win.addEventListener('mouseleave',()=>{paused=false;lastFrame=0;});function moveRecommended(now){if(!document.body.contains(track))return;if(!lastFrame)lastFrame=now;const elapsed=Math.min((now-lastFrame)/1000,0.05);lastFrame=now;if(!paused){offset-=speed*elapsed;let first=track.firstElementChild;while(first&&offset+first.getBoundingClientRect().width<=0){const shift=first.getBoundingClientRect().width+trackGap;track.append(first);offset+=shift;first=track.firstElementChild;}track.style.transform=`translate3d(${offset}px,0,0)`;}requestAnimationFrame(moveRecommended);}requestAnimationFrame(moveRecommended);track.addEventListener('click',e=>{const view=e.target.closest('[data-rec-view]');const add=e.target.closest('[data-rec-add]');if(view)showDetails(others[Number(view.dataset.recView)]);if(add)addToCart(others[Number(add.dataset.recAdd)],add);});}$('recommended-empty').hidden=others.length>0;detailView.scrollIntoView({behavior:'smooth',block:'start'});}
  $('back-to-categories').addEventListener('click',backToCategories);$('back-to-category').addEventListener('click',()=>{document.body.classList.remove('product-detail-mode');browse.hidden=false;detailView.hidden=true;categoryView.hidden=false;});
  document.querySelectorAll('.category-hotspot[data-category]').forEach(button=>{button.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();const key=button.dataset.category;if(categoryNames[key])showCategory(key);});});
  document.querySelectorAll('[data-side-category]').forEach(button=>button.addEventListener('click',()=>showCategory(button.dataset.sideCategory)));
  document.querySelectorAll('[data-subcategory]').forEach(button=>button.addEventListener('click',()=>showProductSubcategory(button.dataset.subcategory)));
+ document.querySelectorAll('[data-brand]').forEach(button=>button.addEventListener('click',()=>showProductBrand(button.dataset.brand,button.dataset.productType)));
  $('home-nav-link')?.addEventListener('click',e=>{e.preventDefault();document.body.classList.remove('product-detail-mode');window.scrollTo({top:0,behavior:'smooth'});});
  const panel=$('cart-panel'),cartItems=$('cart-items');function openCart(){panel.classList.add('open');panel.setAttribute('aria-hidden','false');}function closeCart(){panel.classList.remove('open');panel.setAttribute('aria-hidden','true');}
  function showAddedToast(p){let toast=document.getElementById('cart-added-toast');if(!toast){toast=document.createElement('div');toast.id='cart-added-toast';toast.setAttribute('role','status');toast.setAttribute('aria-live','polite');document.body.append(toast);}toast.innerHTML=`<span class="cart-added-check">✓</span><span><strong>Added to Cart</strong><small>${esc(p.name)}</small></span><button type="button" aria-label="View cart">View Cart</button>`;toast.classList.add('show');toast.querySelector('button').onclick=openCart;clearTimeout(window.cartAddedToastTimer);window.cartAddedToastTimer=setTimeout(()=>toast.classList.remove('show'),3200);}
