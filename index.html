@@ -850,6 +850,71 @@ html{scroll-padding-top:90px}
 @media(max-width:480px){#cart-added-toast{bottom:14px;width:calc(100vw - 28px);box-sizing:border-box;gap:9px;padding:11px 12px}#cart-added-toast small{max-width:145px}}
 </style>
 
+
+<style id="offer-price-final-layout">
+/* Keep the offer label regular; emphasize only the amount. */
+.product-offer-row {
+  display: flex !important;
+  align-items: center !important;
+  gap: 5px !important;
+  flex-wrap: nowrap !important;
+  white-space: nowrap !important;
+  width: 100% !important;
+  max-width: 100% !important;
+}
+.product-offer {
+  display: inline-block !important;
+  white-space: nowrap !important;
+  font-size: 14px !important;
+  font-weight: 400 !important;
+  letter-spacing: -0.35px !important;
+  word-spacing: -1.2px !important;
+  color: #151515 !important;
+  line-height: 1.25 !important;
+}
+.product-offer .offer-value {
+  font-size: 15px !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.35px !important;
+  word-spacing: -1.2px !important;
+  color: #00a843 !important;
+}
+.discount-percent {
+  flex: 0 0 auto !important;
+  font-size: 10px !important;
+  padding: 3px 5px !important;
+  margin: 0 !important;
+  white-space: nowrap !important;
+}
+@media (max-width: 480px) {
+  .product-offer { font-size: 13px !important; }
+  .product-offer .offer-value { font-size: 14px !important; }
+  .discount-percent { font-size: 9px !important; padding: 2px 4px !important; }
+}
+</style>
+
+
+<style id="brahmraj-product-section-headings">
+.product-section-heading{
+  display:flex;align-items:center;justify-content:space-between;
+  width:100%;min-height:62px;box-sizing:border-box;padding:8px 18px;
+  margin:22px 0 16px;background:#ffdf00;border:1px solid #111;color:#000;
+  grid-column:1/-1;
+}
+.product-section-heading .section-title{
+  font-size:36px;font-weight:800;letter-spacing:.3px;line-height:1.2;
+  margin:0;text-transform:uppercase;color:#000;
+}
+.product-section-heading .brand-name{
+  font-size:23px;font-weight:800;margin:0;white-space:nowrap;color:#000;
+}
+@media(max-width:600px){
+  .product-section-heading{min-height:48px;padding:7px 10px;margin:16px 0 12px}
+  .product-section-heading .section-title{font-size:21px}
+  .product-section-heading .brand-name{font-size:15px}
+}
+</style>
+
 </head>
 <body>
 
@@ -961,7 +1026,8 @@ html{scroll-padding-top:90px}
  function formatPrice(value){if(value===undefined||value===null||String(value).trim()==='')return '';const n=Number(String(value).replace(/[^0-9.]/g,''));return Number.isFinite(n)?'₹'+n.toLocaleString('en-IN'):'₹'+String(value);}
  function productPriceMarkup(p){const mrp=formatPrice(p.mrp),offer=formatPrice(p.offerPrice);const mrpNum=Number(String(p.mrp||'').replace(/[^0-9.]/g,''));const offerNum=Number(String(p.offerPrice||'').replace(/[^0-9.]/g,''));const discount=mrpNum>0&&offerNum>0&&mrpNum>offerNum?Math.round((mrpNum-offerNum)/mrpNum*100):0;return `<div class="product-price-block">${mrp?`<span class="product-mrp">MRP <s>${esc(mrp)}</s></span>`:''}<div class="product-offer-row"><span class="product-offer">Offer Price : <span class="offer-value">${offer?esc(offer):'Price on Request'}</span></span>${discount?`<span class="discount-percent">${discount}% OFF</span>`:''}</div><span class="tax-inclusive">Incl. of all taxes</span><span class="shipping-extra">Shipping Charges Extra</span></div>`;}
  function productCard(p){const card=document.createElement('article');card.className='live-product';card.innerHTML=`<img src="${esc(p.images[0]||'')}" alt="${esc(p.name)}" loading="lazy"><div class="live-product-body"><h3>${esc(p.name)}</h3><p>${esc(p.description)}</p>${productPriceMarkup(p)}<div class="product-card-actions"><button class="btn btn-outline view-details" type="button">View Details</button><button class="btn btn-gold add-cart" type="button">Add to Cart</button></div></div>`;card.querySelector('.view-details').addEventListener('click',()=>showDetails(p));card.querySelector('.add-cart').addEventListener('click',e=>addToCart(p,e.currentTarget));return card;}
- function showCategory(key){if(!categoryNames[key])return;currentCategory=key;pendingCategory=productsLoaded?null:key;browse.querySelector('.category-grid').hidden=true;categoryView.hidden=false;detailView.hidden=true;$('selected-category-title').textContent=categoryNames[key];document.querySelectorAll('[data-side-category]').forEach(b=>b.classList.toggle('active',b.dataset.sideCategory===key));list.innerHTML='';if(!productsLoaded){status.hidden=false;status.textContent='Loading products…';}else{const matches=products.filter(p=>p.category===key);matches.forEach(p=>list.append(productCard(p)));status.hidden=matches.length>0;if(!matches.length)status.textContent='No products are currently listed in this category.';}document.body.classList.remove('product-detail-mode');categoryView.scrollIntoView({behavior:'smooth',block:'start'});}
+ function addProductSectionHeading(title){const heading=document.createElement('div');heading.className='product-section-heading';heading.innerHTML=`<h2 class="section-title">${title}</h2><span class="brand-name">BRAHMRAJ</span>`;list.append(heading);}
+ function showCategory(key){if(!categoryNames[key])return;currentCategory=key;pendingCategory=productsLoaded?null:key;browse.querySelector('.category-grid').hidden=true;categoryView.hidden=false;detailView.hidden=true;$('selected-category-title').textContent=categoryNames[key];document.querySelectorAll('[data-side-category]').forEach(b=>b.classList.toggle('active',b.dataset.sideCategory===key));list.innerHTML='';if(!productsLoaded){status.hidden=false;status.textContent='Loading products…';}else{const matches=products.filter(p=>p.category===key);if(key==='toner-ink'){const cartridges=matches.filter(p=>p.productType==='cartridge');const inks=matches.filter(p=>p.productType==='ink');if(cartridges.length){addProductSectionHeading('TONER CARTRIDGES');cartridges.forEach(p=>list.append(productCard(p)));}if(inks.length){addProductSectionHeading('PRINTER INK');inks.forEach(p=>list.append(productCard(p)));}}else{matches.forEach(p=>list.append(productCard(p)));}status.hidden=matches.length>0;if(!matches.length)status.textContent='No products are currently listed in this category.';}document.body.classList.remove('product-detail-mode');categoryView.scrollIntoView({behavior:'smooth',block:'start'});}
  function backToCategories(){categoryView.hidden=true;browse.querySelector('.category-grid').hidden=false;detailView.hidden=true;document.body.classList.remove('product-detail-mode');$('products').scrollIntoView({behavior:'smooth',block:'start'});}
  function showDetails(p){currentProduct=p;browse.hidden=true;categoryView.hidden=true;detailView.hidden=false;document.body.classList.add('product-detail-mode');$('detail-category').textContent=categoryNames[p.category]||'Product';$('detail-name').textContent=p.name;$('detail-description').textContent=p.description||'';let detailPrice=$('detail-price-block');if(!detailPrice){detailPrice=document.createElement('div');detailPrice.id='detail-price-block';detailPrice.className='detail-price-block';$('detail-description').insertAdjacentElement('afterend',detailPrice);}detailPrice.innerHTML=productPriceMarkup(p);const main=$('detail-main-image');main.src=p.images[0]||'';main.alt=p.name;const thumbs=$('detail-thumbnails');thumbs.innerHTML='';p.images.forEach((url,i)=>{const b=document.createElement('button');b.type='button';b.className='detail-thumb'+(i===0?' active':'');b.innerHTML=`<img src="${esc(url)}" alt="${esc(p.name)} photo ${i+1}">`;b.addEventListener('click',()=>{main.src=url;thumbs.querySelectorAll('button').forEach(x=>x.classList.remove('active'));b.classList.add('active');});thumbs.append(b);});const specs=$('detail-specs');specs.innerHTML='';p.specs.forEach(s=>{const li=document.createElement('li');li.textContent=s;specs.append(li);});$('compatibility-block').hidden=!p.compatibility;$('detail-compatibility').textContent=p.compatibility||'';$('detail-add-cart').onclick=e=>addToCart(p,e.currentTarget);const rec=$('recommended-product-list');rec.innerHTML='';const byCategory=Object.keys(categoryNames).map(k=>products.filter(x=>x!==p&&x.category===k));const others=[];let takeMore=true;for(let i=0;takeMore&&others.length<15;i++){takeMore=false;for(const group of byCategory){if(group[i]){others.push(group[i]);takeMore=true;if(others.length>=15)break;}}}if(others.length){const win=document.createElement('div');win.className='recommended-track-window';const track=document.createElement('div');track.className='recommended-track';others.forEach((item,index)=>{const card=document.createElement('article');card.className='recommended-card';card.innerHTML=`<img src="${esc(item.images[0]||'')}" alt="${esc(item.name)}" loading="lazy"><div class="recommended-card-body"><h3>${esc(item.name)}</h3><div class="recommended-card-actions"><button class="btn btn-outline" type="button" data-rec-view="${index}">View Details</button><button class="btn btn-gold" type="button" data-rec-add="${index}">Add to Cart</button></div></div>`;track.append(card);});const originals=[...track.children];for(let copy=0;copy<2;copy++){originals.forEach(card=>track.append(card.cloneNode(true)));}win.append(track);rec.append(win);let offset=win.clientWidth;let lastFrame=0;let paused=false;const speed=75;const trackGap=parseFloat(getComputedStyle(track).gap)||18;track.style.transform=`translate3d(${offset}px,0,0)`;win.addEventListener('mouseenter',()=>{paused=true;});win.addEventListener('mouseleave',()=>{paused=false;lastFrame=0;});function moveRecommended(now){if(!document.body.contains(track))return;if(!lastFrame)lastFrame=now;const elapsed=Math.min((now-lastFrame)/1000,0.05);lastFrame=now;if(!paused){offset-=speed*elapsed;let first=track.firstElementChild;while(first&&offset+first.getBoundingClientRect().width<=0){const shift=first.getBoundingClientRect().width+trackGap;track.append(first);offset+=shift;first=track.firstElementChild;}track.style.transform=`translate3d(${offset}px,0,0)`;}requestAnimationFrame(moveRecommended);}requestAnimationFrame(moveRecommended);track.addEventListener('click',e=>{const view=e.target.closest('[data-rec-view]');const add=e.target.closest('[data-rec-add]');if(view)showDetails(others[Number(view.dataset.recView)]);if(add)addToCart(others[Number(add.dataset.recAdd)],add);});}$('recommended-empty').hidden=others.length>0;detailView.scrollIntoView({behavior:'smooth',block:'start'});}
  $('back-to-categories').addEventListener('click',backToCategories);$('back-to-category').addEventListener('click',()=>{document.body.classList.remove('product-detail-mode');browse.hidden=false;detailView.hidden=true;categoryView.hidden=false;});
