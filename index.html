@@ -1266,6 +1266,8 @@ html{scroll-padding-top:90px}
   if(!profile.state)missing.push('State');
   if(!profile.pincode)missing.push('PIN Code');
   if(missing.length){alert('Please save these details once in My Account before sending your order: '+missing.join(', '));if(window.brahmrajOpenAccount)window.brahmrajOpenAccount();return;}
+  const waWindow=window.open('about:blank','_blank');
+  if(!waWindow){alert('Please allow pop-ups for this website, then try placing the order again.');return;}
   const lines=entries.map(p=>{
    const unit=Number(String(p.offerPrice||'').replace(/[^0-9.]/g,''));
    const hasPrice=Number.isFinite(unit)&&unit>0;
@@ -1275,8 +1277,18 @@ html{scroll-padding-top:90px}
   const hasRequest=entries.some(p=>!(Number(String(p.offerPrice||'').replace(/[^0-9.]/g,''))>0));
   const address=[profile.deliveryAddress,profile.landmark?'Landmark: '+profile.landmark:'',profile.city,profile.state,'PIN: '+profile.pincode].filter(Boolean).join(', ');
   const text=`NEW CUSTOMER ORDER - BRAHMRAJ TRADERS\n\nCustomer Name: ${profile.name}\nEmail: ${user.email||profile.email||'—'}\nMobile: ${profile.mobile}\nDelivery Address: ${address}\n\nProducts:\n${lines}\n\nCart Total: ₹${knownTotal.toLocaleString('en-IN')}${hasRequest?' + Price on Request':''}\nShipping Charges: Extra\n\nCustomer details are taken from the saved account profile.`;
-  window.open('https://wa.me/917800051151?text='+encodeURIComponent(text),'_blank','noopener');
-  cart.clear();updateCart();closeCart();thank.classList.add('open');thank.setAttribute('aria-hidden','false');
+  try{
+   const orderId=await window.brahmrajSaveOrder({
+    items:entries.map(p=>({name:p.name,qty:p.qty,offerPrice:p.offerPrice||'Price on Request'})),
+    total:knownTotal,
+    hasPriceOnRequest:hasRequest
+   });
+   waWindow.location='https://wa.me/917800051151?text='+encodeURIComponent('Order ID: '+orderId+'\\n\\n'+text);
+   cart.clear();updateCart();closeCart();thank.classList.add('open');thank.setAttribute('aria-hidden','false');
+  }catch(saveErr){
+   waWindow.close();
+   alert('Order could not be saved to your account. Your cart has been kept. Please try again.\\n'+saveErr.message);
+  }
  });
  async function loadProducts(){try{const r=await fetch('products.html',{cache:'no-store'});if(!r.ok)throw Error('products.html not found');const doc=new DOMParser().parseFromString(await r.text(),'text/html');const typeRank={cartridge:0,accessory:1,ink:2};products=[...doc.querySelectorAll('.product-item')].map(el=>({name:el.dataset.name||'Product',category:el.dataset.category||'other-products',productType:el.dataset.productType||'ink',description:el.dataset.description||'',specs:(el.dataset.specs||'').split('|').filter(Boolean),compatibility:el.dataset.compatibility||'',mrp:el.dataset.mrp||'',offerPrice:el.dataset.offerPrice||'',priceNote:el.dataset.priceNote||'',images:[...el.querySelectorAll('img')].map(img=>img.getAttribute('src')).filter(Boolean)})).filter(p=>p.name&&p.images.length).sort((a,b)=>(typeRank[a.productType]??3)-(typeRank[b.productType]??3));productsLoaded=true;buildAutomaticCategorySubmenus();$('category-products-view').hidden=true;if(pendingCategory){const key=pendingCategory;pendingCategory=null;showCategory(key);} }catch(err){productsLoaded=true;status.hidden=false;status.textContent='Unable to load the product list. Please check the location of products.html and the assets folder.';}}
  loadProducts();
@@ -1370,6 +1382,29 @@ html{scroll-padding-top:90px}
   const snap=await db.collection('customers').doc(currentUser.uid).get();
   latestCustomerProfile=snap.exists?snap.data():{};
   window.brahmrajCustomerProfile=latestCustomerProfile;return latestCustomerProfile;
+ };
+ window.brahmrajSaveOrder=async function(orderData){
+  if(!currentUser)throw new Error('Please log in before placing an order.');
+  const profile=await window.brahmrajGetCustomerProfile();
+  const ref=await db.collection('orders').add({
+   customerId:currentUser.uid,
+   customerName:profile.name||currentUser.displayName||'Customer',
+   customerEmail:currentUser.email||profile.email||'',
+   customerMobile:profile.mobile||'',
+   deliveryAddress:profile.deliveryAddress||'',
+   city:profile.city||'',
+   state:profile.state||'',
+   pincode:profile.pincode||'',
+   landmark:profile.landmark||'',
+   items:orderData.items,
+   total:orderData.total,
+   hasPriceOnRequest:!!orderData.hasPriceOnRequest,
+   shippingCharges:'Extra',
+   status:'Pending',
+   paymentStatus:'Pending',
+   createdAt:firebase.firestore.FieldValue.serverTimestamp()
+  });
+  return ref.id;
  };
  function renderAuth(){
   title.textContent=register?'Create Customer Account':'Customer Login';
@@ -1484,7 +1519,10 @@ html{scroll-padding-top:90px}
     return `<div style="border:1px solid #e1e8e2;border-radius:9px;padding:11px;margin:8px 0">
      <strong>Order: ${escapeHtml(doc.id.slice(0,10).toUpperCase())}</strong><br>
      Status: ${escapeHtml(o.status||'Pending')}<br>
-     Payment: ${escapeHtml(o.paymentStatus||'Pending')}
+     Payment: ${escapeHtml(o.paymentStatus||'Pending')}<br>
+     ${o.items?.length?`Products: ${o.items.map(x=>`${escapeHtml(x.name)} × ${escapeHtml(x.qty)}`).join(', ')}<br>`:''}
+     ${o.total!==undefined?`Order Total: ₹${Number(o.total||0).toLocaleString('en-IN')}${o.hasPriceOnRequest?' + Price on Request':''}<br>`:''}
+     ${o.deliveryAddress?`Delivery: ${escapeHtml([o.deliveryAddress,o.city,o.state,o.pincode].filter(Boolean).join(', '))}<br>`:''}
      ${isAdmin?`<div style="margin-top:8px"><label style="font-size:12px">Update order status</label><select data-order="${escapeHtml(doc.id)}" class="admin-order-status" style="width:100%;padding:8px;border:1px solid #ccd8ce;border-radius:7px"><option>Pending</option><option>Confirmed</option><option>Processing</option><option>Shipped</option><option>Delivered</option><option>Cancelled</option></select><button data-save="${escapeHtml(doc.id)}" type="button" class="btn btn-gold" style="margin-top:7px">Save Status</button></div>`:''}
     </div>`;
    }).join('');
