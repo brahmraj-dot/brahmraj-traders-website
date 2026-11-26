@@ -1442,7 +1442,7 @@ html{scroll-padding-top:90px}
    ev.preventDefault();
    const status=dialog.querySelector('#delivery-address-message');
    const pin=dialog.querySelector('#delivery-pincode').value.trim();
-   if(!/^\\d{6}$/.test(pin)){status.textContent='Please enter a valid 6-digit PIN code.';return;}
+   if(!/^\d{6}$/.test(pin)){status.textContent='Please enter a valid 6-digit PIN code.';return;}
    try{
     await db.collection('customers').doc(user.uid).set({
      deliveryAddress:dialog.querySelector('#delivery-address').value.trim(),
