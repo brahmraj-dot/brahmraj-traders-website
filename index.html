@@ -1184,9 +1184,8 @@ html{scroll-padding-top:90px}
   <p id="auth-description">Login using your registered mobile number and password.</p>
   <form id="auth-form">
    <div id="auth-name-wrap" hidden><label for="auth-name">Customer Name</label><input id="auth-name" autocomplete="name" maxlength="80" placeholder="Enter your full name"></div>
-   <label for="auth-mobile">Mobile Number</label>
-   <input id="auth-mobile" inputmode="numeric" autocomplete="tel" maxlength="10" pattern="[0-9]{10}" placeholder="10-digit mobile number" required>
-   <div id="auth-email-wrap" hidden><label for="auth-email">Email Address (Password Recovery)</label><input id="auth-email" type="email" autocomplete="email" placeholder="Enter your email address"></div>
+   <div id="auth-mobile-wrap" hidden><label for="auth-mobile">Mobile Number</label><input id="auth-mobile" inputmode="numeric" autocomplete="tel" maxlength="10" pattern="[0-9]{10}" placeholder="10-digit mobile number"></div>
+   <div id="auth-email-wrap"><label for="auth-email">Email Address</label><input id="auth-email" type="email" autocomplete="username" placeholder="Enter your email address" required></div>
    <label for="auth-password">Password</label>
    <input id="auth-password" type="password" autocomplete="current-password" minlength="8" placeholder="Enter password" required>
    <div class="auth-actions"><button class="btn btn-gold" type="submit" id="auth-submit">Login</button></div>
@@ -1306,6 +1305,7 @@ html{scroll-padding-top:90px}
  const submit=document.getElementById('auth-submit');
  const nameWrap=document.getElementById('auth-name-wrap');
  const emailWrap=document.getElementById('auth-email-wrap');
+ const mobileWrap=document.getElementById('auth-mobile-wrap');
  const nameInput=document.getElementById('auth-name');
  const mobileInput=document.getElementById('auth-mobile');
  const emailInput=document.getElementById('auth-email');
@@ -1321,14 +1321,14 @@ html{scroll-padding-top:90px}
   desc.textContent=register?'Register with your name, mobile number, email and password.':'Login using your registered email address and password.';
   submit.textContent=register?'Create Account':'Login';
   toggle.textContent=register?'Already registered? Login':'New customer? Create an account';
-  nameWrap.hidden=!register;emailWrap.hidden=!register;
-  nameInput.required=register;emailInput.required=register;
+  nameWrap.hidden=!register;mobileWrap.hidden=!register;emailWrap.hidden=false;
+  nameInput.required=register;emailInput.required=true;
   mobileInput.required=register;
   mobileInput.autocomplete=register?'tel':'off';
   emailInput.autocomplete=register?'email':'username';
   passInput.autocomplete=register?'new-password':'current-password';
   passInput.minLength=8;
-  message('Use your email and password to log in. Mobile number is collected during registration.');
+  message('Use your email address and password to log in. Your mobile number is collected during registration.');
  }
  function showDashboard(user,profile,isAdmin){
   currentUser=user;
