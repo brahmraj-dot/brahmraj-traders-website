@@ -1281,9 +1281,22 @@ html{scroll-padding-top:90px}
 
 
 
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
 <script>
 (()=>{
+ const firebaseConfig={
+  apiKey:"AIzaSyC30xygHjILZxlyzXlfcWY8L_3ANILtGQ",
+  authDomain:"brahmraj-traders.firebaseapp.com",
+  projectId:"brahmraj-traders",
+  storageBucket:"brahmraj-traders.firebasestorage.app",
+  messagingSenderId:"1062860052045",
+  appId:"1:1062860052045:web:e4379be520c2302c4bae04",
+  measurementId:"G-J85L0ETQM0"
+ };
  const panel=document.getElementById('auth-panel');
+ const dialog=panel?.querySelector('.auth-dialog');
  const open=document.getElementById('login-open');
  const close=document.getElementById('auth-close');
  const form=document.getElementById('auth-form');
@@ -1293,18 +1306,148 @@ html{scroll-padding-top:90px}
  const submit=document.getElementById('auth-submit');
  const nameWrap=document.getElementById('auth-name-wrap');
  const emailWrap=document.getElementById('auth-email-wrap');
- const pass=document.getElementById('auth-password');
+ const nameInput=document.getElementById('auth-name');
+ const mobileInput=document.getElementById('auth-mobile');
+ const emailInput=document.getElementById('auth-email');
+ const passInput=document.getElementById('auth-password');
  const msg=document.getElementById('auth-message');
- let register=false;
- function show(){panel.classList.add('open');panel.setAttribute('aria-hidden','false');}
- function hide(){panel.classList.remove('open');panel.setAttribute('aria-hidden','true');}
- function render(){title.textContent=register?'Create Customer Account':'Customer Login';desc.textContent=register?'Register with your name, mobile number, email and password.':'Login using your registered mobile number and password.';submit.textContent=register?'Register':'Login';toggle.textContent=register?'Already registered? Login':'New customer? Create an account';nameWrap.hidden=!register;emailWrap.hidden=!register;pass.autocomplete=register?'new-password':'current-password';msg.textContent='This is the login interface. Secure Firebase account connection is pending configuration and testing.';}
- open?.addEventListener('click',e=>{e.preventDefault();show();});
- close?.addEventListener('click',hide);
- panel?.addEventListener('click',e=>{if(e.target===panel)hide();});
- toggle?.addEventListener('click',()=>{register=!register;render();});
- form?.addEventListener('submit',e=>{e.preventDefault();msg.textContent='The form design is ready, but account creation/login is not activated yet. Firebase configuration and secure mobile-number account mapping must be connected before customers can sign in.';msg.classList.add('show');});
- render();
+ if(!panel||!form)return;
+ let register=false, currentUser=null;
+ function message(text,isError=false){msg.textContent=text;msg.classList.add('show');msg.style.background=isError?'#fff0ef':'#edf8f0';msg.style.color=isError?'#9b2520':'#175c35';}
+ function openPanel(){panel.classList.add('open');panel.setAttribute('aria-hidden','false');}
+ function closePanel(){panel.classList.remove('open');panel.setAttribute('aria-hidden','true');}
+ function renderAuth(){
+  title.textContent=register?'Create Customer Account':'Customer Login';
+  desc.textContent=register?'Register with your name, mobile number, email and password.':'Login using your registered email address and password.';
+  submit.textContent=register?'Create Account':'Login';
+  toggle.textContent=register?'Already registered? Login':'New customer? Create an account';
+  nameWrap.hidden=!register;emailWrap.hidden=!register;
+  nameInput.required=register;emailInput.required=register;
+  mobileInput.required=register;
+  mobileInput.autocomplete=register?'tel':'off';
+  emailInput.autocomplete=register?'email':'username';
+  passInput.autocomplete=register?'new-password':'current-password';
+  passInput.minLength=8;
+  message('Use your email and password to log in. Mobile number is collected during registration.');
+ }
+ function showDashboard(user,profile,isAdmin){
+  currentUser=user;
+  dialog.innerHTML=`<button class="auth-close" id="auth-close" type="button" aria-label="Close">×</button>
+   <div class="eyebrow">BRAHMRAJ TRADERS ACCOUNT</div>
+   <h2>${isAdmin?'Admin Portal':'My Account'}</h2>
+   <p id="dash-status">Signed in as ${user.email||''}</p>
+   <div style="background:#f5f8f5;border-radius:12px;padding:14px;margin:14px 0">
+    <strong>${isAdmin?'Administrator':'Customer Profile'}</strong>
+    <div style="margin-top:8px;font-size:14px;line-height:1.8">
+     Name: ${escapeHtml(profile?.name||user.displayName||'—')}<br>
+     Email: ${escapeHtml(user.email||'—')}<br>
+     Mobile: ${escapeHtml(profile?.mobile||'—')}
+    </div>
+   </div>
+   <h3 style="color:#123b2b">${isAdmin?'Recent Orders':'My Order History'}</h3>
+   <div id="account-orders" style="font-size:14px;color:#65766c;padding:8px 0">Loading orders…</div>
+   <button class="btn btn-gold" id="auth-logout" type="button" style="width:100%;margin-top:16px">Logout</button>`;
+  dialog.querySelector('#auth-close').addEventListener('click',closePanel);
+  dialog.querySelector('#auth-logout').addEventListener('click',()=>firebase.auth().signOut());
+  panel.classList.add('open');panel.setAttribute('aria-hidden','false');
+  loadOrders(user,isAdmin);
+ }
+ function escapeHtml(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+ async function loadOrders(user,isAdmin){
+  const target=document.getElementById('account-orders');if(!target)return;
+  try{
+   let query=db.collection('orders');
+   if(!isAdmin)query=query.where('customerId','==',user.uid);
+   const snap=await query.limit(50).get();
+   if(snap.empty){target.textContent='No orders found yet.';return;}
+   target.innerHTML=snap.docs.map(doc=>{
+    const o=doc.data();
+    return `<div style="border:1px solid #e1e8e2;border-radius:9px;padding:11px;margin:8px 0">
+     <strong>Order: ${escapeHtml(doc.id.slice(0,10).toUpperCase())}</strong><br>
+     Status: ${escapeHtml(o.status||'Pending')}<br>
+     Payment: ${escapeHtml(o.paymentStatus||'Pending')}
+     ${isAdmin?`<div style="margin-top:8px"><label style="font-size:12px">Update order status</label><select data-order="${escapeHtml(doc.id)}" class="admin-order-status" style="width:100%;padding:8px;border:1px solid #ccd8ce;border-radius:7px"><option>Pending</option><option>Confirmed</option><option>Processing</option><option>Shipped</option><option>Delivered</option><option>Cancelled</option></select><button data-save="${escapeHtml(doc.id)}" type="button" class="btn btn-gold" style="margin-top:7px">Save Status</button></div>`:''}
+    </div>`;
+   }).join('');
+   if(isAdmin){
+    snap.docs.forEach(doc=>{const sel=target.querySelector(`[data-order="${CSS.escape(doc.id)}"]`);if(sel)sel.value=doc.data().status||'Pending';});
+    target.querySelectorAll('[data-save]').forEach(btn=>btn.addEventListener('click',async()=>{
+     const id=btn.getAttribute('data-save'),sel=target.querySelector(`[data-order="${CSS.escape(id)}"]`);
+     try{await db.collection('orders').doc(id).update({status:sel.value,updatedAt:firebase.firestore.FieldValue.serverTimestamp()});btn.textContent='Saved';}
+     catch(e){alert('Status update failed: '+e.message);}
+    }));
+   }
+  }catch(e){target.textContent='Order history could not be loaded. Please check Firestore Rules. '+e.message;}
+ }
+ let auth,db;
+ try{
+  if(!firebase.apps.length)firebase.initializeApp(firebaseConfig);
+  auth=firebase.auth();db=firebase.firestore();
+  auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL).catch(()=>{});
+ }catch(e){message('Firebase could not initialize: '+e.message,true);return;}
+ open?.addEventListener('click',e=>{e.preventDefault();register=false;form.style.display='block';toggle.hidden=false;renderAuth();openPanel();});
+ close?.addEventListener('click',closePanel);
+ panel.addEventListener('click',e=>{if(e.target===panel)closePanel();});
+ toggle?.addEventListener('click',()=>{register=!register;renderAuth();});
+ form.addEventListener('submit',async e=>{
+  e.preventDefault();submit.disabled=true;submit.textContent=register?'Creating…':'Logging in…';
+  try{
+   const email=emailInput.value.trim().toLowerCase(),password=passInput.value;
+   if(register){
+    const name=nameInput.value.trim(),mobile=mobileInput.value.replace(/\D/g,'');
+    if(!name)throw new Error('Please enter your name.');
+    if(!/^[6-9]\d{9}$/.test(mobile))throw new Error('Please enter a valid 10-digit Indian mobile number.');
+    if(password.length<8)throw new Error('Password must be at least 8 characters.');
+    const cred=await auth.createUserWithEmailAndPassword(email,password);
+    await cred.user.updateProfile({displayName:name});
+    await db.collection('customers').doc(cred.user.uid).set({
+     name,mobile,email,createdAt:firebase.firestore.FieldValue.serverTimestamp()
+    });
+    message('Registration successful. Your account is ready.');
+   }else{
+    await auth.signInWithEmailAndPassword(email,password);
+   }
+  }catch(err){
+   const friendly={
+    'auth/email-already-in-use':'This email is already registered. Please log in.',
+    'auth/invalid-email':'Please enter a valid email address.',
+    'auth/weak-password':'Choose a stronger password (at least 8 characters).',
+    'auth/user-not-found':'No account found with this email.',
+    'auth/wrong-password':'Incorrect email or password.',
+    'auth/invalid-credential':'Incorrect email or password.',
+    'auth/too-many-requests':'Too many attempts. Please try again later.'
+   };
+   message(friendly[err.code]||err.message,true);
+  }finally{submit.disabled=false;submit.textContent=register?'Create Account':'Login';}
+ });
+ // Password reset link for customers and admins.
+ const forgot=document.createElement('button');
+ forgot.type='button';forgot.className='auth-switch';forgot.textContent='Forgot password? Send reset link';
+ form.appendChild(forgot);
+ forgot.addEventListener('click',async()=>{
+  const email=emailInput.value.trim().toLowerCase();
+  if(!email){message('Enter your email address first, then click Forgot password.',true);return;}
+  try{await auth.sendPasswordResetEmail(email);message('Password reset link sent to your email.');}
+  catch(e){message(e.message,true);}
+ });
+ auth.onAuthStateChanged(async user=>{
+  if(!user){
+   currentUser=null;
+   if(dialog && !document.getElementById('auth-form')){
+    location.reload();
+   }
+   return;
+  }
+  try{
+   const adminDoc=await db.collection('admin').doc(user.uid).get();
+   const isAdmin=adminDoc.exists&&adminDoc.data().role==='admin';
+   const profileSnap=await db.collection('customers').doc(user.uid).get();
+   const profile=profileSnap.exists?profileSnap.data():{};
+   form.style.display='none';toggle.hidden=true;
+   showDashboard(user,profile,isAdmin);
+  }catch(e){message('Signed in, but profile could not be loaded. Check Firestore Rules: '+e.message,true);}
+ });
+ renderAuth();
 })();
 </script>
 
