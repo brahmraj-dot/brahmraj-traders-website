@@ -1270,11 +1270,11 @@ html{scroll-padding-top:90px}
    const unit=Number(String(p.offerPrice||'').replace(/[^0-9.]/g,''));
    const hasPrice=Number.isFinite(unit)&&unit>0;
    return `${p.name} x ${p.qty} | ${hasPrice?'₹'+unit.toLocaleString('en-IN')+' each':'Price on Request'} | Item Total: ${hasPrice?'₹'+(unit*p.qty).toLocaleString('en-IN'):'Price on Request'} | Incl. of all taxes`;
-  }).join('\\n');
+  }).join('\n');
   const knownTotal=entries.reduce((sum,p)=>{const unit=Number(String(p.offerPrice||'').replace(/[^0-9.]/g,''));return sum+(Number.isFinite(unit)&&unit>0?unit*p.qty:0);},0);
   const hasRequest=entries.some(p=>!(Number(String(p.offerPrice||'').replace(/[^0-9.]/g,''))>0));
   const address=[profile.deliveryAddress,profile.landmark?'Landmark: '+profile.landmark:'',profile.city,profile.state,'PIN: '+profile.pincode].filter(Boolean).join(', ');
-  const text=`NEW CUSTOMER ORDER - BRAHMRAJ TRADERS\\n\\nCustomer Name: ${profile.name}\\nEmail: ${user.email||profile.email||'—'}\\nMobile: ${profile.mobile}\\nDelivery Address: ${address}\\n\\nProducts:\\n${lines}\\n\\nCart Total: ₹${knownTotal.toLocaleString('en-IN')}${hasRequest?' + Price on Request':''}\\nShipping Charges: Extra\\n\\nCustomer details are taken from the saved account profile.`;
+  const text=`NEW CUSTOMER ORDER - BRAHMRAJ TRADERS\n\nCustomer Name: ${profile.name}\nEmail: ${user.email||profile.email||'—'}\nMobile: ${profile.mobile}\nDelivery Address: ${address}\n\nProducts:\n${lines}\n\nCart Total: ₹${knownTotal.toLocaleString('en-IN')}${hasRequest?' + Price on Request':''}\nShipping Charges: Extra\n\nCustomer details are taken from the saved account profile.`;
   window.open('https://wa.me/917800051151?text='+encodeURIComponent(text),'_blank','noopener');
   cart.clear();updateCart();closeCart();thank.classList.add('open');thank.setAttribute('aria-hidden','false');
  });
