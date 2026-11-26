@@ -1312,7 +1312,7 @@ html{scroll-padding-top:90px}
  const passInput=document.getElementById('auth-password');
  const msg=document.getElementById('auth-message');
  if(!panel||!form)return;
- let register=false, currentUser=null;
+ let register=false, currentUser=null, registrationInProgress=false;
  function message(text,isError=false){msg.textContent=text;msg.classList.add('show');msg.style.background=isError?'#fff0ef':'#edf8f0';msg.style.color=isError?'#9b2520':'#175c35';}
  function openPanel(){panel.classList.add('open');panel.setAttribute('aria-hidden','false');}
  function closePanel(){panel.classList.remove('open');panel.setAttribute('aria-hidden','true');}
@@ -1344,11 +1344,33 @@ html{scroll-padding-top:90px}
      Mobile: ${escapeHtml(profile?.mobile||'—')}
     </div>
    </div>
+   ${!isAdmin&&!profile?.mobile?`<form id="complete-customer-profile" style="background:#fff8e8;border-radius:12px;padding:14px;margin:14px 0">
+    <strong>Complete your customer profile</strong>
+    <label style="display:block;margin:10px 0 5px;font-weight:700">Customer Name</label>
+    <input id="complete-customer-name" value="${escapeHtml(profile?.name||user.displayName||'')}" required maxlength="80" style="width:100%;padding:11px;border:1px solid #cbd8ce;border-radius:8px">
+    <label style="display:block;margin:10px 0 5px;font-weight:700">Mobile Number</label>
+    <input id="complete-customer-mobile" inputmode="numeric" maxlength="10" pattern="[6-9][0-9]{9}" required placeholder="10-digit mobile number" style="width:100%;padding:11px;border:1px solid #cbd8ce;border-radius:8px">
+    <button type="submit" class="btn btn-gold" style="width:100%;margin-top:12px">Save Profile</button>
+    <div id="complete-profile-message" style="font-size:13px;margin-top:8px"></div>
+   </form>`:''}
    <h3 style="color:#123b2b">${isAdmin?'Recent Orders':'My Order History'}</h3>
    <div id="account-orders" style="font-size:14px;color:#65766c;padding:8px 0">Loading orders…</div>
    <button class="btn btn-gold" id="auth-logout" type="button" style="width:100%;margin-top:16px">Logout</button>`;
   dialog.querySelector('#auth-close').addEventListener('click',closePanel);
   dialog.querySelector('#auth-logout').addEventListener('click',()=>firebase.auth().signOut());
+  const completeForm=dialog.querySelector('#complete-customer-profile');
+  if(completeForm)completeForm.addEventListener('submit',async ev=>{
+   ev.preventDefault();
+   const nm=dialog.querySelector('#complete-customer-name').value.trim();
+   const mob=dialog.querySelector('#complete-customer-mobile').value.replace(/\D/g,'');
+   const status=dialog.querySelector('#complete-profile-message');
+   if(!/^[6-9]\d{9}$/.test(mob)){status.textContent='Please enter a valid 10-digit Indian mobile number.';return;}
+   try{
+    await db.collection('customers').doc(user.uid).set({name:nm,mobile:mob,email:user.email||'',updatedAt:firebase.firestore.FieldValue.serverTimestamp()},{merge:true});
+    const fresh=await db.collection('customers').doc(user.uid).get();
+    showDashboard(user,fresh.data()||{name:nm,mobile:mob},isAdmin);
+   }catch(err){status.textContent='Could not save profile: '+err.message;}
+  });
   panel.classList.add('open');panel.setAttribute('aria-hidden','false');
   loadOrders(user,isAdmin);
  }
@@ -1394,6 +1416,7 @@ html{scroll-padding-top:90px}
   try{
    const email=emailInput.value.trim().toLowerCase(),password=passInput.value;
    if(register){
+    registrationInProgress=true;
     const name=nameInput.value.trim(),mobile=mobileInput.value.replace(/\D/g,'');
     if(!name)throw new Error('Please enter your name.');
     if(!/^[6-9]\d{9}$/.test(mobile))throw new Error('Please enter a valid 10-digit Indian mobile number.');
@@ -1403,11 +1426,14 @@ html{scroll-padding-top:90px}
     await db.collection('customers').doc(cred.user.uid).set({
      name,mobile,email,createdAt:firebase.firestore.FieldValue.serverTimestamp()
     });
-    message('Registration successful. Your account is ready.');
+    registrationInProgress=false;
+    form.style.display='none';toggle.hidden=true;
+    showDashboard(cred.user,{name,mobile,email},false);
    }else{
     await auth.signInWithEmailAndPassword(email,password);
    }
   }catch(err){
+   registrationInProgress=false;
    const friendly={
     'auth/email-already-in-use':'This email is already registered. Please log in.',
     'auth/invalid-email':'Please enter a valid email address.',
@@ -1431,6 +1457,7 @@ html{scroll-padding-top:90px}
   catch(e){message(e.message,true);}
  });
  auth.onAuthStateChanged(async user=>{
+  if(registrationInProgress)return;
   if(!user){
    currentUser=null;
    if(dialog && !document.getElementById('auth-form')){
