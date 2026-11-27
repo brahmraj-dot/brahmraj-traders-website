@@ -1193,10 +1193,46 @@ html{scroll-padding-top:90px}
 #login-open{display:inline-flex;align-items:center;justify-content:center}
 @media(max-width:850px){#login-open{display:inline-flex;align-self:center}}
 @media(max-width:850px){#login-open{display:inline-flex;align-self:flex-start}}
+
+/* Reliable desktop company poster panel */
+@media (min-width: 851px) {
+  .auth-overlay.open.company-poster-open .company-poster-side {
+    display: block !important;
+    position: fixed !important;
+    left: 0 !important;
+    top: 0 !important;
+    width: calc(100vw - min(560px, 94vw)) !important;
+    height: 100dvh !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    z-index: 1102 !important;
+    overflow: hidden !important;
+    background: #fffaf2 !important;
+    cursor: pointer !important;
+  }
+  .auth-overlay.open.company-poster-open .company-poster-side img {
+    display: block !important;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: contain !important;
+    object-position: center !important;
+    background: #fffaf2 !important;
+  }
+  .auth-overlay.open.company-poster-open .auth-dialog {
+    position: relative !important;
+    z-index: 1103 !important;
+    flex: 0 0 min(560px, 94vw) !important;
+    width: min(560px, 94vw) !important;
+  }
+}
+@media (max-width: 850px) {
+  .company-poster-side { display: none !important; }
+}
+
 </style>
 <div class="auth-overlay" id="auth-panel" aria-hidden="true">
  <button type="button" class="company-poster-side" id="company-poster-side" aria-label="Close company poster and customer profile">
-  <img src="brahmraj-left-poster.png" alt="Brahmraj Traders - About Us, Services and Marketplace Platforms">
+  <img src="./brahmraj-left-poster.png" alt="Brahmraj Traders - About Us, Services and Marketplace Platforms">
  </button>
  <div class="auth-dialog" role="dialog" aria-modal="true" aria-labelledby="auth-title">
   <button class="auth-close" id="auth-close" type="button" aria-label="Close">×</button>
@@ -1442,6 +1478,7 @@ html{scroll-padding-top:90px}
  }
  function showDashboard(user,profile,isAdmin){
   panel.classList.toggle('company-poster-open',!isAdmin&&window.innerWidth>850);
+  if(!isAdmin && window.innerWidth > 850) panel.classList.add('company-poster-open');
   currentUser=user;window.brahmrajCurrentUser=user;latestCustomerProfile=profile||{};window.brahmrajCustomerProfile=latestCustomerProfile;
   if(open){
    const customerName=profile?.name||user.displayName||'Customer';
@@ -1510,6 +1547,15 @@ html{scroll-padding-top:90px}
    }catch(err){status.textContent='Could not save profile: '+err.message;}
   });
   panel.classList.add('open');panel.setAttribute('aria-hidden','false');
+  if(!isAdmin && window.innerWidth > 850) {
+    panel.classList.add('company-poster-open');
+    if(companyPoster) {
+      companyPoster.style.display = 'block';
+      companyPoster.style.visibility = 'visible';
+    }
+  } else {
+    panel.classList.remove('company-poster-open');
+  }
   loadOrders(user,isAdmin);
  }
  function escapeHtml(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
