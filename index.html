@@ -1383,14 +1383,14 @@ window.BRAHMRAJ_UPI_SETTINGS = window.BRAHMRAJ_UPI_SETTINGS || { upiId: "9112581
   const hasRequest=entries.some(p=>!(Number(String(p.offerPrice||'').replace(/[^0-9.]/g,''))>0));
   const address=[profile.deliveryAddress,profile.landmark?'Landmark: '+profile.landmark:'',profile.city,profile.state,'PIN: '+profile.pincode].filter(Boolean).join(', ');
   const localLucknow=/lucknow/i.test([profile.city,profile.state].join(' '));
-  const text=`NEW CUSTOMER ORDER - BRAHMRAJ TRADERS\n\nCustomer Name: ${profile.name}\nEmail: ${user.email||profile.email||'—'}\nMobile: ${profile.mobile}\nGSTIN: ${profile.gstin||'Not provided'}\nDelivery Address: ${address}\nDelivery Preference: ${localLucknow?'Lucknow local same-day delivery may be requested; subject to partner availability and confirmation.':'Standard delivery / dispatch'}\n\nProducts:\n${lines}\n\nCart Total: ₹${knownTotal.toLocaleString('en-IN')}${hasRequest?' + Price on Request':''}\nShipping Charges: Extra\n\nCustomer details are taken from the saved account profile.`;
+  const text=`Customer Name: ${profile.name}\nEmail: ${user.email||profile.email||'—'}\nMobile: ${profile.mobile}\nGSTIN: ${profile.gstin||'Not provided'}\nDelivery Address: ${address}\nDelivery Preference: ${localLucknow?'Lucknow local same-day delivery may be requested; subject to partner availability and confirmation.':'Standard delivery / dispatch'}\n\nProducts:\n${lines}\n\nCart Total: ₹${knownTotal.toLocaleString('en-IN')}${hasRequest?' + Price on Request':''}\nShipping Charges: Extra\n\nCustomer details are taken from the saved account profile.`;
   try{
    const orderId=await window.brahmrajSaveOrder({
     items:entries.map(p=>({name:p.name,qty:p.qty,offerPrice:p.offerPrice||'Price on Request'})),
     total:knownTotal,
     hasPriceOnRequest:hasRequest
    });
-   waWindow.location='https://wa.me/917800051151?text='+encodeURIComponent('Order ID: '+orderId+'\\n\\n'+text);
+   waWindow.location='https://wa.me/917800051151?text='+encodeURIComponent('Order ID: '+(orderId && typeof orderId==='object' ? (orderId.orderNumber || orderId.id || '') : orderId)+'\n\n'+text);
    cart.clear();updateCart();closeCart();thank.classList.add('open');thank.setAttribute('aria-hidden','false');
   }catch(saveErr){
    waWindow.close();
