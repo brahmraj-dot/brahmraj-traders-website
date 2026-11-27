@@ -1162,9 +1162,16 @@ html{scroll-padding-top:90px}
 </main>
 
 <style>
-.auth-overlay{position:fixed;inset:0;background:#071b13bb;z-index:1100;display:none;align-items:center;justify-content:center;padding:16px}
+.auth-overlay{position:fixed;inset:0;background:rgba(5,28,19,.62);backdrop-filter:blur(4px);z-index:1100;display:none;align-items:stretch;justify-content:flex-end;padding:0}
 .auth-overlay.open{display:flex}
-.auth-dialog{width:min(460px,100%);max-height:92vh;overflow:auto;background:#fff;border:2px solid #d9a441;border-radius:18px;padding:25px;position:relative;box-shadow:0 20px 70px #0004}
+.auth-dialog{width:min(560px,94vw);height:100dvh;max-height:100dvh;overflow-y:auto;overflow-x:hidden;background:linear-gradient(145deg,#fff 0%,#fffaf0 55%,#f1f8f3 100%);border:0;border-left:5px solid #d9a441;border-radius:24px 0 0 24px;padding:30px 28px 34px;position:relative;box-shadow:-18px 0 65px #0004;animation:accountSlideIn .32s ease-out}
+@keyframes accountSlideIn{from{transform:translateX(45px);opacity:.6}to{transform:translateX(0);opacity:1}}
+.auth-dialog .eyebrow{color:#a8781b;letter-spacing:3px;font-weight:800}
+.auth-dialog .account-profile-card{background:linear-gradient(135deg,#e8f4ed,#f4f8f4);border:1px solid #c9dfd1;border-radius:18px;padding:18px;margin:18px 0;box-shadow:0 8px 22px #174d2a10}
+.auth-dialog .account-edit-card{background:linear-gradient(135deg,#fff5df,#fffaf0);border:1px solid #efd49b;border-radius:18px;padding:18px;margin:16px 0}
+.auth-dialog .account-orders-title{background:linear-gradient(90deg,#123b2b,#26734d);color:#fff;padding:12px 16px;border-radius:12px;margin:20px 0 10px}
+.auth-dialog .account-accent{color:#a87819}
+@media(max-width:600px){.auth-dialog{width:100%;height:100dvh;max-height:100dvh;border-radius:0;border-left:0;border-top:4px solid #d9a441;padding:25px 18px 30px}.auth-close{position:sticky;float:right;top:0;z-index:3;background:#fff8e8;border-radius:50%;width:38px;height:38px;line-height:32px}}
 .auth-dialog h2{margin:5px 0 8px;color:#123b2b}.auth-dialog p{color:#65766c;font-size:13px;margin:0 0 16px}
 .auth-close{position:absolute;right:13px;top:8px;border:0;background:none;font-size:29px;cursor:pointer;color:#123b2b}
 .auth-dialog label{display:block;font-weight:700;margin:12px 0 5px;color:#17251e}
@@ -1290,7 +1297,7 @@ html{scroll-padding-top:90px}
    alert('Order could not be saved to your account. Your cart has been kept. Please try again.\\n'+saveErr.message);
   }
  });
- async function loadProducts(){try{const r=await fetch('products.html',{cache:'no-store'});if(!r.ok)throw Error('products.html not found');const doc=new DOMParser().parseFromString(await r.text(),'text/html');const typeRank={cartridge:0,accessory:1,ink:2};products=[...doc.querySelectorAll('.product-item')].map(el=>({name:el.dataset.name||'Product',category:el.dataset.category||'other-products',productType:el.dataset.productType||'ink',description:el.dataset.description||'',specs:(el.dataset.specs||'').split('|').filter(Boolean),compatibility:el.dataset.compatibility||'',mrp:el.dataset.mrp||'',offerPrice:el.dataset.offerPrice||'',priceNote:el.dataset.priceNote||'',images:[...el.querySelectorAll('img')].map(img=>img.getAttribute('src')).filter(Boolean)})).filter(p=>p.name&&p.images.length).sort((a,b)=>(typeRank[a.productType]??3)-(typeRank[b.productType]??3));const priceDb=window.brahmrajFirestore;if(priceDb){try{const priceSnap=await priceDb.collection('productPrices').get();priceSnap.forEach(d=>{const v=d.data();const p=products.find(x=>x.name===v.productName);if(p){p.mrp=v.mrp??p.mrp;p.offerPrice=v.offerPrice??p.offerPrice;p.priceNote=p.offerPrice?'':'Price on Request';}});const detailSnap=await priceDb.collection('productDetails').get();detailSnap.forEach(d=>{const v=d.data();const p=products.find(x=>x.name===v.originalName||x.name===v.name);if(p){p.name=v.name??p.name;p.category=v.category??p.category;p.description=v.description??p.description;p.specs=Array.isArray(v.specs)?v.specs:p.specs;p.compatibility=v.compatibility??p.compatibility;if(v.image)p.images=[v.image,...p.images.slice(1)];}});}catch(priceErr){console.warn('Live product overrides unavailable:',priceErr.message);}}productsLoaded=true;buildAutomaticCategorySubmenus();$('category-products-view').hidden=true;if(pendingCategory){const key=pendingCategory;pendingCategory=null;showCategory(key);}if(priceDb&&!window.brahmrajPriceListener){window.brahmrajPriceListener=priceDb.collection('productPrices').onSnapshot(snap=>{let changed=false;snap.docChanges().forEach(change=>{if(change.type!=='added'&&change.type!=='modified')return;const v=change.doc.data(),p=products.find(x=>x.name===v.productName);if(p&&(String(p.mrp)!==String(v.mrp)||String(p.offerPrice)!==String(v.offerPrice))){p.mrp=v.mrp??p.mrp;p.offerPrice=v.offerPrice??p.offerPrice;p.priceNote=p.offerPrice?'':'Price on Request';changed=true;}});if(changed)location.reload();},err=>console.warn('Price update listener:',err.message));}}catch(err){productsLoaded=true;status.hidden=false;status.textContent='Unable to load the product list. Please check the location of products.html and the assets folder.';}}
+ async function loadProducts(){try{const r=await fetch('products.html',{cache:'no-store'});if(!r.ok)throw Error('products.html not found');const doc=new DOMParser().parseFromString(await r.text(),'text/html');const typeRank={cartridge:0,accessory:1,ink:2};products=[...doc.querySelectorAll('.product-item')].map(el=>({name:el.dataset.name||'Product',category:el.dataset.category||'other-products',productType:el.dataset.productType||'ink',description:el.dataset.description||'',specs:(el.dataset.specs||'').split('|').filter(Boolean),compatibility:el.dataset.compatibility||'',mrp:el.dataset.mrp||'',offerPrice:el.dataset.offerPrice||'',priceNote:el.dataset.priceNote||'',images:[...el.querySelectorAll('img')].map(img=>img.getAttribute('src')).filter(Boolean)})).filter(p=>p.name&&p.images.length).sort((a,b)=>(typeRank[a.productType]??3)-(typeRank[b.productType]??3));const priceDb=window.brahmrajFirestore;if(priceDb){try{const priceSnap=await priceDb.collection('productPrices').get();priceSnap.forEach(d=>{const v=d.data();const p=products.find(x=>x.name===v.productName);if(p){p.mrp=v.mrp??p.mrp;p.offerPrice=v.offerPrice??p.offerPrice;p.priceNote=p.offerPrice?'':'Price on Request';}});}catch(priceErr){console.warn('Live product prices unavailable:',priceErr.message);}}productsLoaded=true;buildAutomaticCategorySubmenus();$('category-products-view').hidden=true;if(pendingCategory){const key=pendingCategory;pendingCategory=null;showCategory(key);}if(priceDb&&!window.brahmrajPriceListener){window.brahmrajPriceListener=priceDb.collection('productPrices').onSnapshot(snap=>{let changed=false;snap.docChanges().forEach(change=>{if(change.type!=='added'&&change.type!=='modified')return;const v=change.doc.data(),p=products.find(x=>x.name===v.productName);if(p&&(String(p.mrp)!==String(v.mrp)||String(p.offerPrice)!==String(v.offerPrice))){p.mrp=v.mrp??p.mrp;p.offerPrice=v.offerPrice??p.offerPrice;p.priceNote=p.offerPrice?'':'Price on Request';changed=true;}});if(changed)location.reload();},err=>console.warn('Price update listener:',err.message));}}catch(err){productsLoaded=true;status.hidden=false;status.textContent='Unable to load the product list. Please check the location of products.html and the assets folder.';}}
  loadProducts();
 })();
 </script>
@@ -1443,71 +1450,49 @@ html{scroll-padding-top:90px}
    <div class="eyebrow">BRAHMRAJ TRADERS ACCOUNT</div>
    <h2>${isAdmin?'Admin Portal':'Hello, '+escapeHtml(profile?.name||user.displayName||'Customer')}</h2>
    <p id="dash-status">Welcome to your Brahmraj Traders account · ${escapeHtml(user.email||'')}</p>
-   <div style="background:#f5f8f5;border-radius:12px;padding:14px;margin:14px 0">
+   <div class="account-profile-card">
     <strong>${isAdmin?'Administrator':'Customer Profile'}</strong>
     <div style="margin-top:8px;font-size:14px;line-height:1.8">
      Name: ${escapeHtml(profile?.name||user.displayName||'—')}<br>
      Email: ${escapeHtml(user.email||'—')}<br>
-     Mobile: ${escapeHtml(profile?.mobile||'—')}
+     Mobile: ${escapeHtml(profile?.mobile||'—')}<br>
+     Address: ${escapeHtml([profile?.deliveryAddress,profile?.city,profile?.state,profile?.pincode,profile?.landmark].filter(Boolean).join(', ')||'Not added')}
     </div>
+    ${!isAdmin?'<button type="button" id="toggle-profile-edit" class="btn btn-gold" style="margin-top:10px">Edit Profile & Address</button>':''}
    </div>
-   ${!isAdmin&&!profile?.mobile?`<form id="complete-customer-profile" style="background:#fff8e8;border-radius:12px;padding:14px;margin:14px 0">
-    <strong>Complete your customer profile</strong>
-    <label style="display:block;margin:10px 0 5px;font-weight:700">Customer Name</label>
-    <input id="complete-customer-name" value="${escapeHtml(profile?.name||user.displayName||'')}" required maxlength="80" style="width:100%;padding:11px;border:1px solid #cbd8ce;border-radius:8px">
-    <label style="display:block;margin:10px 0 5px;font-weight:700">Mobile Number</label>
-    <input id="complete-customer-mobile" inputmode="numeric" maxlength="10" pattern="[6-9][0-9]{9}" required placeholder="10-digit mobile number" style="width:100%;padding:11px;border:1px solid #cbd8ce;border-radius:8px">
-    <button type="submit" class="btn btn-gold" style="width:100%;margin-top:12px">Save Profile</button>
-    <div id="complete-profile-message" style="font-size:13px;margin-top:8px"></div>
-   </form>`:''}
-   ${!isAdmin?`<form id="delivery-address-form" style="background:#fff8e8;border-radius:12px;padding:14px;margin:14px 0">
-    <h3 style="margin:0 0 8px;color:#123b2b">Delivery Address</h3>
-    <label style="display:block;margin:9px 0 4px;font-weight:700">House / Flat / Street Address</label>
-    <textarea id="delivery-address" required rows="2" maxlength="300" placeholder="House no., street, area">${escapeHtml(profile?.deliveryAddress||'')}</textarea>
+   ${!isAdmin?`<form id="customer-profile-edit" class="account-edit-card" style="display:none">
+    <h3 style="margin:0 0 8px;color:#123b2b">Edit Customer Profile</h3>
+    <label style="display:block;margin:9px 0 4px;font-weight:700">Customer Name</label><input id="edit-customer-name" required maxlength="80" value="${escapeHtml(profile?.name||user.displayName||'')}" style="width:100%;padding:11px;border:1px solid #cbd8ce;border-radius:8px">
+    <label style="display:block;margin:9px 0 4px;font-weight:700">Email (cannot be changed here)</label><input value="${escapeHtml(user.email||'')}" disabled style="width:100%;padding:11px;border:1px solid #cbd8ce;border-radius:8px;background:#eee">
+    <label style="display:block;margin:9px 0 4px;font-weight:700">Mobile Number (cannot be changed here)</label><input value="${escapeHtml(profile?.mobile||'')}" disabled style="width:100%;padding:11px;border:1px solid #cbd8ce;border-radius:8px;background:#eee">
+    <h3 style="margin:16px 0 6px;color:#123b2b">Delivery Address</h3>
+    <label style="display:block;margin:9px 0 4px;font-weight:700">House / Flat / Street Address</label><textarea id="edit-delivery-address" required rows="2" maxlength="300" style="width:100%;padding:11px;border:1px solid #cbd8ce;border-radius:8px">${escapeHtml(profile?.deliveryAddress||'')}</textarea>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
-     <div><label style="display:block;margin:9px 0 4px;font-weight:700">City</label><input id="delivery-city" required maxlength="80" value="${escapeHtml(profile?.city||'')}" placeholder="City"></div>
-     <div><label style="display:block;margin:9px 0 4px;font-weight:700">State</label><input id="delivery-state" required maxlength="80" value="${escapeHtml(profile?.state||'Uttar Pradesh')}" placeholder="State"></div>
-     <div><label style="display:block;margin:9px 0 4px;font-weight:700">PIN Code</label><input id="delivery-pincode" required inputmode="numeric" maxlength="6" pattern="[0-9]{6}" value="${escapeHtml(profile?.pincode||'')}" placeholder="6-digit PIN"></div>
-     <div><label style="display:block;margin:9px 0 4px;font-weight:700">Landmark (optional)</label><input id="delivery-landmark" maxlength="100" value="${escapeHtml(profile?.landmark||'')}" placeholder="Nearby landmark"></div>
+     <div><label style="display:block;margin:9px 0 4px;font-weight:700">City</label><input id="edit-delivery-city" required maxlength="80" value="${escapeHtml(profile?.city||'')}" style="width:100%;padding:11px;border:1px solid #cbd8ce;border-radius:8px"></div>
+     <div><label style="display:block;margin:9px 0 4px;font-weight:700">State</label><input id="edit-delivery-state" required maxlength="80" value="${escapeHtml(profile?.state||'Uttar Pradesh')}" style="width:100%;padding:11px;border:1px solid #cbd8ce;border-radius:8px"></div>
+     <div><label style="display:block;margin:9px 0 4px;font-weight:700">PIN Code</label><input id="edit-delivery-pincode" required inputmode="numeric" maxlength="6" pattern="[0-9]{6}" value="${escapeHtml(profile?.pincode||'')}" style="width:100%;padding:11px;border:1px solid #cbd8ce;border-radius:8px"></div>
+     <div><label style="display:block;margin:9px 0 4px;font-weight:700">Landmark</label><input id="edit-delivery-landmark" maxlength="100" value="${escapeHtml(profile?.landmark||'')}" style="width:100%;padding:11px;border:1px solid #cbd8ce;border-radius:8px"></div>
     </div>
-    <button type="submit" class="btn btn-gold" style="width:100%;margin-top:12px">Save Delivery Address</button>
-    <div id="delivery-address-message" style="font-size:13px;margin-top:8px"></div>
+    <button type="submit" class="btn btn-gold" style="width:100%;margin-top:12px">Save Profile & Address</button><div id="edit-profile-message" style="font-size:13px;margin-top:8px"></div>
    </form>`:''}
-   <h3 style="color:#123b2b">${isAdmin?'Recent Orders':'My Order History'}</h3>
+   <h3 class="account-orders-title">${isAdmin?'Recent Orders':'My Order History'}</h3>
    <div id="account-orders" style="font-size:14px;color:#65766c;padding:8px 0">Loading orders…</div>
    <button class="btn btn-gold" id="auth-logout" type="button" style="width:100%;margin-top:16px">Logout</button>`;
   dialog.querySelector('#auth-close').addEventListener('click',closePanel);
   dialog.querySelector('#auth-logout').addEventListener('click',()=>firebase.auth().signOut());
   if(open)open.textContent=isAdmin?'Admin Portal':'Hello, '+(profile?.name||user.displayName||'Customer');
-  const addressForm=dialog.querySelector('#delivery-address-form');
-  if(addressForm)addressForm.addEventListener('submit',async ev=>{
-   ev.preventDefault();
-   const status=dialog.querySelector('#delivery-address-message');
-   const pin=dialog.querySelector('#delivery-pincode').value.trim();
+  const editToggle=dialog.querySelector('#toggle-profile-edit');
+  const editForm=dialog.querySelector('#customer-profile-edit');
+  if(editToggle&&editForm)editToggle.addEventListener('click',()=>{editForm.style.display=editForm.style.display==='none'?'block':'none';});
+  if(editForm)editForm.addEventListener('submit',async ev=>{
+   ev.preventDefault();const status=dialog.querySelector('#edit-profile-message');
+   const pin=dialog.querySelector('#edit-delivery-pincode').value.trim();
    if(!/^\d{6}$/.test(pin)){status.textContent='Please enter a valid 6-digit PIN code.';return;}
    try{
-    await db.collection('customers').doc(user.uid).set({
-     deliveryAddress:dialog.querySelector('#delivery-address').value.trim(),
-     city:dialog.querySelector('#delivery-city').value.trim(),
-     state:dialog.querySelector('#delivery-state').value.trim(),
-     pincode:pin,
-     landmark:dialog.querySelector('#delivery-landmark').value.trim(),
-     updatedAt:firebase.firestore.FieldValue.serverTimestamp()
-    },{merge:true});
-    latestCustomerProfile={...latestCustomerProfile,deliveryAddress:dialog.querySelector('#delivery-address').value.trim(),city:dialog.querySelector('#delivery-city').value.trim(),state:dialog.querySelector('#delivery-state').value.trim(),pincode:pin,landmark:dialog.querySelector('#delivery-landmark').value.trim()};window.brahmrajCustomerProfile=latestCustomerProfile;status.textContent='Delivery address saved successfully.';
-   }catch(err){status.textContent='Could not save address: '+err.message;}
-  });
-  const completeForm=dialog.querySelector('#complete-customer-profile');
-  if(completeForm)completeForm.addEventListener('submit',async ev=>{
-   ev.preventDefault();
-   const nm=dialog.querySelector('#complete-customer-name').value.trim();
-   const mob=dialog.querySelector('#complete-customer-mobile').value.replace(/\D/g,'');
-   const status=dialog.querySelector('#complete-profile-message');
-   if(!/^[6-9]\d{9}$/.test(mob)){status.textContent='Please enter a valid 10-digit Indian mobile number.';return;}
-   try{
-    await db.collection('customers').doc(user.uid).set({name:nm,mobile:mob,email:user.email||'',updatedAt:firebase.firestore.FieldValue.serverTimestamp()},{merge:true});
-    const fresh=await db.collection('customers').doc(user.uid).get();
-    latestCustomerProfile=fresh.data()||{name:nm,mobile:mob};window.brahmrajCustomerProfile=latestCustomerProfile;showDashboard(user,latestCustomerProfile,isAdmin);
+    const update={name:dialog.querySelector('#edit-customer-name').value.trim(),deliveryAddress:dialog.querySelector('#edit-delivery-address').value.trim(),city:dialog.querySelector('#edit-delivery-city').value.trim(),state:dialog.querySelector('#edit-delivery-state').value.trim(),pincode:pin,landmark:dialog.querySelector('#edit-delivery-landmark').value.trim(),updatedAt:firebase.firestore.FieldValue.serverTimestamp()};
+    await db.collection('customers').doc(user.uid).set(update,{merge:true});
+    latestCustomerProfile={...latestCustomerProfile,...update};window.brahmrajCustomerProfile=latestCustomerProfile;status.textContent='Profile and address saved successfully.';
+    setTimeout(()=>renderAccount(user,latestCustomerProfile,isAdmin),500);
    }catch(err){status.textContent='Could not save profile: '+err.message;}
   });
   panel.classList.add('open');panel.setAttribute('aria-hidden','false');
@@ -1530,9 +1515,19 @@ html{scroll-padding-top:90px}
      ${o.items?.length?`Products: ${o.items.map(x=>`${escapeHtml(x.name)} × ${escapeHtml(x.qty)}`).join(', ')}<br>`:''}
      ${o.total!==undefined?`Order Total: ₹${Number(o.total||0).toLocaleString('en-IN')}${o.hasPriceOnRequest?' + Price on Request':''}<br>`:''}
      ${o.deliveryAddress?`Delivery: ${escapeHtml([o.deliveryAddress,o.city,o.state,o.pincode].filter(Boolean).join(', '))}<br>`:''}
+     ${!isAdmin?`<details style="margin-top:10px"><summary style="cursor:pointer;font-weight:700;color:#123b2b">Submit Payment Details</summary><form class="payment-submit-form" data-payment-order="${escapeHtml(doc.id)}" style="padding:10px 0"><label>Payment Date</label><input name="paidDate" type="date" required style="width:100%;padding:9px;margin:4px 0 8px"><label>Paid Amount (₹)</label><input name="paidAmount" type="number" min="1" step="0.01" required style="width:100%;padding:9px;margin:4px 0 8px"><label>Transaction / UTR Number</label><input name="transactionNumber" required maxlength="80" style="width:100%;padding:9px;margin:4px 0 8px"><button type="submit" class="btn btn-gold" style="width:100%">Submit Payment Details</button><div class="payment-submit-message" style="font-size:13px;margin-top:7px"></div></form></details>`:''}
      ${isAdmin?`<div style="margin-top:8px"><label style="font-size:12px">Update order status</label><select data-order="${escapeHtml(doc.id)}" class="admin-order-status" style="width:100%;padding:8px;border:1px solid #ccd8ce;border-radius:7px"><option>Pending</option><option>Confirmed</option><option>Processing</option><option>Shipped</option><option>Delivered</option><option>Cancelled</option></select><button data-save="${escapeHtml(doc.id)}" type="button" class="btn btn-gold" style="margin-top:7px">Save Status</button></div>`:''}
     </div>`;
    }).join('');
+   if(!isAdmin){
+    target.querySelectorAll('.payment-submit-form').forEach(form=>form.addEventListener('submit',async ev=>{
+     ev.preventDefault();const status=form.querySelector('.payment-submit-message'),fd=new FormData(form),orderId=form.dataset.paymentOrder;
+     const paidAmount=Number(fd.get('paidAmount'));
+     if(!Number.isFinite(paidAmount)||paidAmount<=0){status.textContent='Enter a valid paid amount.';return;}
+     try{await db.collection('paymentSubmissions').doc(orderId).set({orderId,customerId:user.uid,customerName:latestCustomerProfile?.name||user.displayName||'',customerEmail:user.email||'',paidDate:String(fd.get('paidDate')),paidAmount,transactionNumber:String(fd.get('transactionNumber')).trim(),status:'Submitted',submittedAt:firebase.firestore.FieldValue.serverTimestamp()},{merge:true});status.textContent='Payment details submitted. Admin will verify and confirm.';form.querySelector('button').disabled=true;}
+     catch(err){status.textContent='Submission failed: '+err.message;}
+    }));
+   }
    if(isAdmin){
     snap.docs.forEach(doc=>{const sel=target.querySelector(`[data-order="${CSS.escape(doc.id)}"]`);if(sel)sel.value=doc.data().status||'Pending';});
     target.querySelectorAll('[data-save]').forEach(btn=>btn.addEventListener('click',async()=>{
