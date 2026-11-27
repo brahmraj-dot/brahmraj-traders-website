@@ -215,9 +215,34 @@ body{background:#eef2fa;color:#122b5c;font-family:Arial,Helvetica,sans-serif}
   .stat:nth-child(n+10) .stat strong { font-size:23px !important; }
 }
 
+
+/* Header branding: use the exact logo uploaded to the repository */
+.brand-header { position:relative !important; overflow:hidden !important; }
+.brand-logo-wrap {
+  position:absolute !important; left:0 !important; top:0 !important;
+  width:276px !important; height:100% !important;
+  display:flex !important; align-items:center !important; justify-content:center !important;
+  padding:9px 20px !important; background:#fff !important;
+  border-radius:0 0 48px 0 !important; z-index:5 !important;
+  box-shadow:5px 0 12px #5b270b20 !important;
+}
+.brand-header .brand-logo-img {
+  display:block !important; width:100% !important; height:100% !important;
+  max-height:94px !important; object-fit:contain !important;
+}
+.brand-header .brand-mark, .brand-header .brand-name { display:none !important; }
+.brand-header .brand-title { display:block !important; visibility:hidden !important; }
+@media(max-width:760px) {
+  .brand-logo-wrap { width:155px !important; padding:7px 10px !important; border-radius:0 0 25px 0 !important; }
+  .brand-header .brand-logo-img { max-height:70px !important; }
+}
+@media(max-width:420px) {
+  .brand-logo-wrap { width:112px !important; padding:6px !important; }
+}
+
 </style>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script></head><body>
-<header class="brand-header"><div class="brand-mark">B</div><div class="brand-name"><strong>Brahmraj</strong><b>Traders</b></div><div class="brand-title"><h1>BRAHMRAJ TRADERS</h1><span>ADMIN DASHBOARD</span></div><div class="brand-user"><span class="user-dot">●</span><span>Admin</span><button id="logout" class="logout-btn" hidden>Logout</button></div></header><div class="wrap"><section id="login" class="card"><h2>Admin Login</h2><form id="loginForm"><label>Email</label><input id="email" type="email" required value="brahmrajtraders@gmail.com"><br><br><label>Password</label><input id="password" type="password" required><br><br><button>Login</button><p id="loginMsg"></p></form></section><main id="app"><div id="saveToast" role="status" aria-live="polite"></div><div class="portal-layout"><aside class="sidebar"><div class="side-label">MAIN MENU</div><nav class="admin-nav" aria-label="Admin management sections">
+<header class="brand-header"><div class="brand-logo-wrap"><img class="brand-logo-img" src="Brahmraj-logo.png" alt="Brahmraj Traders Logo"></div><div class="brand-mark">B</div><div class="brand-name"><strong>Brahmraj</strong><b>Traders</b></div><div class="brand-title"><h1>BRAHMRAJ TRADERS</h1><span>ADMIN DASHBOARD</span></div><div class="brand-user"><span class="user-dot">●</span><span>Admin</span><button id="logout" class="logout-btn" hidden>Logout</button></div></header><div class="wrap"><section id="login" class="card"><h2>Admin Login</h2><form id="loginForm"><label>Email</label><input id="email" type="email" required value="brahmrajtraders@gmail.com"><br><br><label>Password</label><input id="password" type="password" required><br><br><button>Login</button><p id="loginMsg"></p></form></section><main id="app"><div id="saveToast" role="status" aria-live="polite"></div><div class="portal-layout"><aside class="sidebar"><div class="side-label">MAIN MENU</div><nav class="admin-nav" aria-label="Admin management sections">
 <button type="button" data-section="dashboard" class="nav-btn nav-dashboard active"><span class="side-ico"><svg viewBox="0 0 24 24"><path d="m3 10 9-7 9 7v11h-6v-7H9v7H3z"/></svg></span>Dashboard</button>
 <button type="button" data-section="orders" class="nav-btn nav-orders"><span class="side-ico"><svg viewBox="0 0 24 24"><path d="M2 3h2l2.5 13h12L21 7H5M8 20h.01M18 20h.01"/></svg></span>Orders</button>
 <button type="button" data-section="paymentSubmissions" class="nav-btn nav-payments"><span class="side-ico"><svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 9h20M6 14h5"/></svg></span>Payment Submissions</button>
