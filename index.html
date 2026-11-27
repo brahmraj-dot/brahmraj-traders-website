@@ -1290,7 +1290,7 @@ html{scroll-padding-top:90px}
    alert('Order could not be saved to your account. Your cart has been kept. Please try again.\\n'+saveErr.message);
   }
  });
- async function loadProducts(){try{const r=await fetch('products.html',{cache:'no-store'});if(!r.ok)throw Error('products.html not found');const doc=new DOMParser().parseFromString(await r.text(),'text/html');const typeRank={cartridge:0,accessory:1,ink:2};products=[...doc.querySelectorAll('.product-item')].map(el=>({name:el.dataset.name||'Product',category:el.dataset.category||'other-products',productType:el.dataset.productType||'ink',description:el.dataset.description||'',specs:(el.dataset.specs||'').split('|').filter(Boolean),compatibility:el.dataset.compatibility||'',mrp:el.dataset.mrp||'',offerPrice:el.dataset.offerPrice||'',priceNote:el.dataset.priceNote||'',images:[...el.querySelectorAll('img')].map(img=>img.getAttribute('src')).filter(Boolean)})).filter(p=>p.name&&p.images.length).sort((a,b)=>(typeRank[a.productType]??3)-(typeRank[b.productType]??3));productsLoaded=true;buildAutomaticCategorySubmenus();$('category-products-view').hidden=true;if(pendingCategory){const key=pendingCategory;pendingCategory=null;showCategory(key);} }catch(err){productsLoaded=true;status.hidden=false;status.textContent='Unable to load the product list. Please check the location of products.html and the assets folder.';}}
+ async function loadProducts(){try{const r=await fetch('products.html',{cache:'no-store'});if(!r.ok)throw Error('products.html not found');const doc=new DOMParser().parseFromString(await r.text(),'text/html');const typeRank={cartridge:0,accessory:1,ink:2};products=[...doc.querySelectorAll('.product-item')].map(el=>({name:el.dataset.name||'Product',category:el.dataset.category||'other-products',productType:el.dataset.productType||'ink',description:el.dataset.description||'',specs:(el.dataset.specs||'').split('|').filter(Boolean),compatibility:el.dataset.compatibility||'',mrp:el.dataset.mrp||'',offerPrice:el.dataset.offerPrice||'',priceNote:el.dataset.priceNote||'',images:[...el.querySelectorAll('img')].map(img=>img.getAttribute('src')).filter(Boolean)})).filter(p=>p.name&&p.images.length).sort((a,b)=>(typeRank[a.productType]??3)-(typeRank[b.productType]??3));if(db){try{const priceSnap=await db.collection('productPrices').get();priceSnap.forEach(d=>{const v=d.data();const p=products.find(x=>x.name===v.productName);if(p){p.mrp=v.mrp??p.mrp;p.offerPrice=v.offerPrice??p.offerPrice;p.priceNote=p.offerPrice?'':'Price on Request';}});}catch(priceErr){console.warn('Live product prices unavailable:',priceErr.message);}}productsLoaded=true;buildAutomaticCategorySubmenus();$('category-products-view').hidden=true;if(pendingCategory){const key=pendingCategory;pendingCategory=null;showCategory(key);}if(db&&!window.brahmrajPriceListener){window.brahmrajPriceListener=db.collection('productPrices').onSnapshot(snap=>{let changed=false;snap.docChanges().forEach(change=>{if(change.type!=='added'&&change.type!=='modified')return;const v=change.doc.data(),p=products.find(x=>x.name===v.productName);if(p&&(String(p.mrp)!==String(v.mrp)||String(p.offerPrice)!==String(v.offerPrice))){p.mrp=v.mrp??p.mrp;p.offerPrice=v.offerPrice??p.offerPrice;p.priceNote=p.offerPrice?'':'Price on Request';changed=true;}});if(changed)location.reload();},err=>console.warn('Price update listener:',err.message));}}catch(err){productsLoaded=true;status.hidden=false;status.textContent='Unable to load the product list. Please check the location of products.html and the assets folder.';}}
  loadProducts();
 })();
 </script>
@@ -1432,6 +1432,13 @@ html{scroll-padding-top:90px}
    open.style.justifyContent='center';
    open.style.lineHeight='1.35';
   }
+  if(isAdmin){
+   dialog.innerHTML=`<button class="auth-close" id="auth-close" type="button" aria-label="Close">×</button><div class="eyebrow">BRAHMRAJ TRADERS ADMINISTRATION</div><h2>Admin Portal</h2><p>Manage all products, prices, customer orders and payment confirmations from the separate Admin Dashboard.</p><a class="btn btn-gold" href="admin.html" style="display:block;text-align:center;text-decoration:none;margin:18px 0">Open Admin Dashboard</a><button class="btn btn-gold" id="auth-logout" type="button" style="width:100%">Logout</button>`;
+   dialog.querySelector('#auth-close').addEventListener('click',closePanel);
+   dialog.querySelector('#auth-logout').addEventListener('click',()=>firebase.auth().signOut());
+   panel.classList.add('open');panel.setAttribute('aria-hidden','false');
+   return;
+  }
   dialog.innerHTML=`<button class="auth-close" id="auth-close" type="button" aria-label="Close">×</button>
    <div class="eyebrow">BRAHMRAJ TRADERS ACCOUNT</div>
    <h2>${isAdmin?'Admin Portal':'Hello, '+escapeHtml(profile?.name||user.displayName||'Customer')}</h2>
@@ -1471,7 +1478,7 @@ html{scroll-padding-top:90px}
    <button class="btn btn-gold" id="auth-logout" type="button" style="width:100%;margin-top:16px">Logout</button>`;
   dialog.querySelector('#auth-close').addEventListener('click',closePanel);
   dialog.querySelector('#auth-logout').addEventListener('click',()=>firebase.auth().signOut());
-  if(open)open.textContent=isAdmin?'Admin Account':'Hello, '+(profile?.name||user.displayName||'Customer');
+  if(open)open.textContent=isAdmin?'Admin Portal':'Hello, '+(profile?.name||user.displayName||'Customer');
   const addressForm=dialog.querySelector('#delivery-address-form');
   if(addressForm)addressForm.addEventListener('submit',async ev=>{
    ev.preventDefault();
