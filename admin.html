@@ -185,6 +185,36 @@ body{background:#eef2fa;color:#122b5c;font-family:Arial,Helvetica,sans-serif}
  .brand-header .logout-btn{font-size:11px!important;padding:5px 9px!important;opacity:.94}
  .portal-layout{min-height:calc(100vh - 116px)!important}
 }
+
+/* FINAL TYPOGRAPHY + ONE-SCREEN DASHBOARD TUNING */
+@media (min-width:1101px) {
+  .dashboard-card .stats { grid-template-columns: repeat(6,minmax(0,1fr)) !important; gap:12px !important; }
+  .stat { min-height:clamp(88px,11vh,108px) !important; padding:10px 13px !important; gap:10px !important; border-radius:20px !important; }
+  .stat:nth-child(-n+9) { grid-column:span 2 !important; }
+  .stat:nth-child(n+10) { grid-column:span 3 !important; min-height:clamp(112px,14vh,132px) !important; padding:12px 20px !important; }
+  .stat-icon { width:clamp(64px,5.5vw,82px) !important; height:clamp(64px,5.5vw,82px) !important; min-width:clamp(64px,5.5vw,82px) !important; }
+  .stat-icon svg { width:58% !important; height:58% !important; }
+  .stat-copy { padding-left:11px !important; gap:5px !important; }
+  .stat small { font-size:clamp(14px,1vw,17px) !important; line-height:1.12 !important; letter-spacing:0 !important; overflow-wrap:anywhere !important; }
+  .stat strong { font-size:clamp(22px,1.55vw,27px) !important; line-height:1.08 !important; white-space:normal !important; overflow-wrap:anywhere !important; margin:0 !important; }
+  .stat:nth-child(n+10) .stat-icon { width:clamp(76px,6.5vw,96px) !important; height:clamp(76px,6.5vw,96px) !important; min-width:clamp(76px,6.5vw,96px) !important; }
+  .stat:nth-child(n+10) .stat small { font-size:clamp(15px,1.05vw,18px) !important; line-height:1.12 !important; }
+  .stat:nth-child(n+10) .stat strong { font-size:clamp(23px,1.65vw,28px) !important; line-height:1.08 !important; white-space:normal !important; }
+  .dashboard-hint { font-size:12px !important; margin-top:5px !important; }
+}
+@media (min-width:1101px) and (max-height:820px) {
+  .welcome-row { min-height:54px !important; margin-bottom:7px !important; }
+  .welcome-row h2 { font-size:25px !important; }
+  .welcome-row p { font-size:14px !important; }
+  .date-chip { font-size:14px !important; padding:8px 14px !important; }
+  .stat { min-height:82px !important; }
+  .stat:nth-child(n+10) { min-height:104px !important; }
+  .stat small { font-size:14px !important; }
+  .stat strong { font-size:22px !important; }
+  .stat:nth-child(n+10) .stat small { font-size:15px !important; }
+  .stat:nth-child(n+10) .stat strong { font-size:23px !important; }
+}
+
 </style>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script></head><body>
 <header class="brand-header"><div class="brand-mark">B</div><div class="brand-name"><strong>Brahmraj</strong><b>Traders</b></div><div class="brand-title"><h1>BRAHMRAJ TRADERS</h1><span>ADMIN DASHBOARD</span></div><div class="brand-user"><span class="user-dot">●</span><span>Admin</span><button id="logout" class="logout-btn" hidden>Logout</button></div></header><div class="wrap"><section id="login" class="card"><h2>Admin Login</h2><form id="loginForm"><label>Email</label><input id="email" type="email" required value="brahmrajtraders@gmail.com"><br><br><label>Password</label><input id="password" type="password" required><br><br><button>Login</button><p id="loginMsg"></p></form></section><main id="app"><div id="saveToast" role="status" aria-live="polite"></div><div class="portal-layout"><aside class="sidebar"><div class="side-label">MAIN MENU</div><nav class="admin-nav" aria-label="Admin management sections">
